@@ -62,7 +62,7 @@ public class ShiroConfig  {
         shiroFilterFactoryBean.setFilters(filterMap);
 
         //需要登录的接口，如果访问某个接口，需要登录却没登录，则调用此接口(如果不是前后端分离，则跳转页面)
-        shiroFilterFactoryBean.setLoginUrl("/index.html/#/login");
+        shiroFilterFactoryBean.setLoginUrl("/");
 
         //登录成功，跳转url，如果前后端分离，则没这个调用
         //shiroFilterFactoryBean.setSuccessUrl("/home.html");

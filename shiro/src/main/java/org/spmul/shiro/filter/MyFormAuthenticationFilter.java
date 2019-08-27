@@ -11,7 +11,7 @@ public class MyFormAuthenticationFilter extends FormAuthenticationFilter {
     @Override
     protected boolean onAccessDenied(ServletRequest request, ServletResponse response) throws Exception {
 
-        /*检查是否是请求了登陆页面（/index.html/#/login）*/
+        /*检查是否是请求了登陆页面（/）*/
         if (this.isLoginRequest(request, response)) {
             if (this.isLoginSubmission(request, response)) {
                 return this.executeLogin(request, response);
