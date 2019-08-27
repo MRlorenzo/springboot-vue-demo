@@ -120,7 +120,7 @@
 							<executable>npm</executable>  <!-- 执行命令 -->
 							<arguments>
 								<argument>run</argument>
-								<argument>build</argument>  <!-- 参数:  -->
+								<argument>build:prod</argument>  <!-- 参数: prod -->
 							</arguments>
 							<workingDirectory>${basedir}/src/main/webapp</workingDirectory>
 						</configuration>
