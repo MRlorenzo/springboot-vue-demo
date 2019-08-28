@@ -26,23 +26,23 @@ const users = {
 export default [
   // user login
   {
-    url: '/user/login',
+    url: '/login/doLogin',
     type: 'post',
     response: config => {
       const { username } = config.body
-      const token = tokens[username]
+      const { token } = tokens[username]
 
       // mock error
       if (!token) {
         return {
-          code: 60204,
+          code: 500,
           message: 'Account and password are incorrect.'
         }
       }
 
       return {
-        code: 20000,
-        data: token
+        code: 0,
+        token: token
       }
     }
   },
@@ -64,7 +64,7 @@ export default [
       }
 
       return {
-        code: 20000,
+        code: 0,
         data: info
       }
     }
@@ -72,11 +72,11 @@ export default [
 
   // user logout
   {
-    url: '/user/logout',
+    url: '/login/doLogout',
     type: 'post',
     response: _ => {
       return {
-        code: 20000,
+        code: 0,
         data: 'success'
       }
     }
