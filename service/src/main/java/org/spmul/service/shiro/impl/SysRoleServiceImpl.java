@@ -21,7 +21,6 @@ package org.spmul.service.shiro.impl;
 import org.spmul.dao.shiro.SysRoleDao;
 import org.spmul.entity.shiro.SysRoleEntity;
 import org.spmul.service.impl.BaseServiceImpl;
-import org.spmul.service.shiro.SysRoleMenuService;
 import org.spmul.service.shiro.SysRoleService;
 import org.spmul.service.shiro.SysUserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,9 +43,6 @@ public class SysRoleServiceImpl extends BaseServiceImpl<SysRoleEntity> implement
     private SysRoleDao sysRoleDao;
 
     @Autowired
-    private SysRoleMenuService sysRoleMenuService;
-
-    @Autowired
     private SysUserService sysUserService;
 
     @Override
@@ -67,11 +63,6 @@ public class SysRoleServiceImpl extends BaseServiceImpl<SysRoleEntity> implement
         role.setIsDel(0);
         sysRoleDao.save(role);
 
-        //检查权限是否越权
-        checkPrems(role);
-
-        //保存角色与菜单关系
-        sysRoleMenuService.saveOrUpdate(role.getRoleId(), role.getMenuIdList());
     }
 
     @Override
@@ -79,12 +70,6 @@ public class SysRoleServiceImpl extends BaseServiceImpl<SysRoleEntity> implement
     public int update(SysRoleEntity role) {
 
         int update = sysRoleDao.update(role);
-
-        //检查权限是否越权
-        checkPrems(role);
-
-        //更新角色与菜单关系
-        sysRoleMenuService.saveOrUpdate(role.getRoleId(), role.getMenuIdList());
 
         return update;
     }
@@ -111,21 +96,4 @@ public class SysRoleServiceImpl extends BaseServiceImpl<SysRoleEntity> implement
     }
 
 
-    /**
-     * 检查权限是否越权
-     */
-    private void checkPrems(SysRoleEntity role){
-        //如果不是超级管理员，则需要判断角色的权限是否超过自己的权限
-        if(role.getCreateUserId() == 1){
-            return ;
-        }
-
-        //查询用户所拥有的菜单列表
-        List<Long> menuIdList = sysUserService.queryAllMenuId(role.getCreateUserId());
-
-        //判断是否越权
-        if(!menuIdList.containsAll(role.getMenuIdList())){
-            throw new RuntimeException("新增角色的权限，已超出你的权限范围");
-        }
-    }
 }

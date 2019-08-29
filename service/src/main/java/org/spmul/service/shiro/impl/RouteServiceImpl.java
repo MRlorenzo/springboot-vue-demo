@@ -28,7 +28,12 @@ public class RouteServiceImpl extends BaseServiceImpl<RouteEntity> implements Ro
     }
 
     @Override
-    public List<RouteEntity> queryList(Map<String, Object> map) {
-        return routeDao.queryList(map);
+    public List<RouteEntity> queryRouteItemByUserId(Long userId) {
+        return routeDao.queryRouteItemByUserId(userId);
+    }
+
+    @Override
+    public List<String> queryPermissionsByUserId(Long userId) {
+        return routeDao.queryPermissionsByUserId(userId);
     }
 }

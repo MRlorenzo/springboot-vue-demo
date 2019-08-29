@@ -50,6 +50,4 @@ public interface SysRoleService extends BaseDao<SysRoleEntity> {
      */
     List<SysRoleEntity> queryListByDepartmentId(Long departmentId);
 
-
-
 }

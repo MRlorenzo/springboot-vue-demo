@@ -58,8 +58,6 @@ public class SysRoleEntity implements Serializable {
      */
     private Long createUserId;
 
-    private List<Long> menuIdList;
-
     /**
      * 创建时间
      */

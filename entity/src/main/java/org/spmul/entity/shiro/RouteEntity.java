@@ -34,6 +34,12 @@ public class RouteEntity {
     /*父id*/
     private Long pid;
 
+    /*排序字段*/
+    private Integer sort;
+
+    /*权限字符串*/
+    private String perms;
+
     /*子项*/
     private List<RouteEntity> children;
 }

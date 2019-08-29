@@ -30,18 +30,7 @@ import java.util.Set;
 public interface SysUserService extends BaseDao<SysUserEntity> {
 
 
-    /**
-     * 查询用户的所有权限
-     * @param userId  用户ID
-     */
-    List<String> queryAllPerms(Long userId);
-
     Set<String> queryPermissionsByUserId(Long userId);
-
-    /**
-     * 查询用户的所有菜单ID
-     */
-    List<Long> queryAllMenuId(Long userId);
 
     /**
      * 根据用户名，查询系统用户
@@ -62,12 +51,6 @@ public interface SysUserService extends BaseDao<SysUserEntity> {
      */
     SysUserEntity queryObject(Long userId);
 
-
-    /**
-     * 查询用户列表
-     */
-    List<SysUserEntity> queryAllInfoList(Map<String, Object> map);
-
     /**
      * 修改密码
      * @param userId       用户ID
@@ -76,53 +59,5 @@ public interface SysUserService extends BaseDao<SysUserEntity> {
      */
     int updatePassword(Long userId, String password, String newPassword);
 
-    void changeStatus(Map<String, Object> map);
 
-
-    /**
-     * 根据用户Id,查询角色是否需要选择班次
-     */
-    boolean selectIsShiftByUserId();
-
-
-    /**
-     * 查询用户是否属于发牌员角色
-     * @param userId
-     * @return
-     */
-    int queryUserIsDealer(Long userId);
-
-    /**
-     * 查询当前用户是否可以强制围数
-     * @return
-     */
-    /*boolean currentUserIsCanForceUpdate();*/
-
-
-    /**
-     * 根据登陆帐号查询员工的某些信息, 不是管理员，总经理。不能看自己同级的数据
-     * @param username
-     * @return
-     */
-    /*List<Map<String,Object>> queryUserLikeUsername(String username);*/
-
-    /**
-     * 检查是否有admin权限
-     * @param userId
-     * @return
-     */
-    boolean checkHasAdminAuthority(Long userId);
-
-    /**
-     * 查找用户最小排序的角色权限
-     * @param userId
-     * @return
-     */
-    Long queryUserMinRoleIdByUserId(Long userId);
-
-    /**
-     * 批量导入
-     * @param list
-     */
-    void batchImport(List<SysUserEntity> list);
 }

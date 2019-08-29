@@ -2,26 +2,16 @@
 package org.spmul.shiro.realm;
 
 import org.apache.shiro.authc.*;
-import org.apache.shiro.authc.credential.HashedCredentialsMatcher;
 import org.apache.shiro.authz.AuthorizationInfo;
 import org.apache.shiro.authz.SimpleAuthorizationInfo;
-import org.apache.shiro.crypto.hash.Sha256Hash;
 import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.subject.PrincipalCollection;
-import org.spmul.dao.shiro.SysRoleDao;
-import org.spmul.entity.shiro.SysMenuEntity;
 import org.spmul.entity.shiro.SysUserEntity;
-import org.spmul.service.shiro.SysMenuService;
 import org.spmul.service.shiro.SysUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.springframework.util.StringUtils;
 
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.List;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 /**
  * @author 知秋

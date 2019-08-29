@@ -6,11 +6,10 @@ import org.spmul.common.annotation.SysAllLog;
 import org.spmul.common.base.BaseController;
 import org.spmul.common.base.BaseDao;
 import org.spmul.common.util.R;
-import org.spmul.entity.AreaEntity;
+import org.spmul.entity.OrderEntity;
 import org.spmul.entity.TestEntiry;
 import org.spmul.redis.RedisUtil;
-import org.spmul.service.AreaService;
-import org.spmul.shiro.utils.ShiroUtils;
+import org.spmul.service.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -21,26 +20,33 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
-@RequestMapping("test")
 @Slf4j
-public class TestController extends BaseController<AreaEntity>{
+public class TestController extends BaseController<OrderEntity>{
 
     @Autowired
-    private AreaService areaService;
+    private OrderService orderService;
 
     @Autowired
     private RedisUtil redisUtil;
 
     @Override
-    protected BaseDao<AreaEntity> getBaseService() {
-        return areaService;
+    protected BaseDao<OrderEntity> getBaseService() {
+        return orderService;
+    }
+
+    @RequestMapping("/transaction/list")
+    public R list(){
+        Map<String , Object> data = new HashMap<>();
+        data.put("total", 4);
+        data.put("items" , orderService.queryList(null));
+        return R.ok().put("data" , data);
     }
 
     @RequestMapping("/test")
     @SysAllLog(operation="这是一个测试方法,测试aop有没有生效的方法。",optTypeName = "测试" ,optTypeName2 = "测试。。。。")
     public R test(){
         log.info("执行了test()方法。");
-        List<AreaEntity> areaEntities = areaService.queryList(new HashMap<>());
+        List<OrderEntity> areaEntities = orderService.queryList(new HashMap<>());
         return R.ok().put("list" , areaEntities);
     }
 
