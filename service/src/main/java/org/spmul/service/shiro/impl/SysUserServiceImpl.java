@@ -60,11 +60,11 @@ public class SysUserServiceImpl extends BaseServiceImpl<SysUserEntity> implement
     @Autowired
     private SysMenuDao sysMenuDao;
 
-
     @Override
     public BaseDao<SysUserEntity> getBaseDao() {
         return sysUserDao;
     }
+
 
     @Override
     public List<String> queryAllPerms(Long userId) {

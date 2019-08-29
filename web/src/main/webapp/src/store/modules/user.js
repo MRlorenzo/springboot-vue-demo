@@ -1,7 +1,7 @@
 import { login, logout, getInfo } from '@/api/user'
 import { getToken, setToken, removeToken } from '@/utils/auth'
 import router, { resetRouter } from '@/router'
-
+import { devLog } from '@/utils/devLog'
 const state = {
   token: getToken(),
   name: '',
@@ -47,14 +47,15 @@ const actions = {
   // get user info
   getInfo({ commit, state }) {
     return new Promise((resolve, reject) => {
-      getInfo(state.token).then(response => {
-        const { data } = response
+      devLog('require user info ....')
 
-        if (!data) {
+      getInfo().then(response => {
+        const { entity } = response
+
+        if (!entity) {
           reject('Verification failed, please Login again.')
         }
-
-        const { roles, name, avatar, introduction } = data
+        const { roles, name, avatar, introduction , routes} = entity
 
         // roles must be a non-empty array
         if (!roles || roles.length <= 0) {
@@ -65,7 +66,7 @@ const actions = {
         commit('SET_NAME', name)
         commit('SET_AVATAR', avatar)
         commit('SET_INTRODUCTION', introduction)
-        resolve(data)
+        resolve(entity)
       }).catch(error => {
         reject(error)
       })

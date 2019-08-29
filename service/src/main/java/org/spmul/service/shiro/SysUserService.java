@@ -16,6 +16,7 @@
  */
 
 package org.spmul.service.shiro;
+import org.spmul.entity.dto.UserInfo;
 import org.spmul.entity.shiro.SysUserEntity;
 import org.spmul.common.base.BaseDao;
 import java.util.List;

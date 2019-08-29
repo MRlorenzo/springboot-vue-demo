@@ -5,7 +5,10 @@ package org.spmul.shiro.utils;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.session.Session;
 import org.apache.shiro.subject.Subject;
+import org.spmul.entity.dto.UserInfo;
 import org.spmul.entity.shiro.SysUserEntity;
+
+import java.util.Arrays;
 
 public class ShiroUtils {
     public static Session getSession() {
@@ -22,6 +25,17 @@ public class ShiroUtils {
 
     public static Long getUserId() {
         return getUserEntity().getUserId();
+    }
+
+    public static UserInfo getUserInfo(){
+        UserInfo userInfo = new UserInfo();
+        SysUserEntity userEntity = ShiroUtils.getUserEntity();
+
+        userInfo.setName(userEntity.getSurname()+ " " + userEntity.getGivenNames());
+        userInfo.setIntroduction(userEntity.getRemark());
+        userInfo.setRoles(Arrays.asList(userEntity.getRoleText()));
+        userInfo.setRoleIds(Arrays.asList(userEntity.getRoleId()));
+        return userInfo;
     }
 
     /**

@@ -23,7 +23,10 @@ module.exports = {
   publicPath: '/demo',
   outputDir: 'dist',
   assetsDir: 'static',
-  lintOnSave: process.env.NODE_ENV === 'development',
+  /*
+  *  是否在保存的时候检查 process.env.NODE_ENV === 'development'
+  * */
+  lintOnSave: false,
   productionSourceMap: false,
   devServer: {
     port: port,

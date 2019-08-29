@@ -1,24 +1,26 @@
 import request from '@/utils/request'
 
+// 登陆接口
 export function login(data) {
   return request({
-    url: '/login/doLogin',
+    url: '/user/login',
     method: 'post',
     data
   })
 }
 
-export function getInfo(token) {
+// 获取用户信息接口
+export function getInfo() {
   return request({
     url: '/user/info',
-    method: 'get',
-    params: { token }
+    method: 'get'
   })
 }
 
+// 退出登陆接口
 export function logout() {
   return request({
-    url: '/login/doLogout',
+    url: '/user/logout',
     method: 'post'
   })
 }

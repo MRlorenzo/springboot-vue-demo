@@ -153,7 +153,10 @@
 	</select>
 
 	<select id="queryByUserName" resultType="org.spmul.entity.shiro.SysUserEntity">
-		select * from sys_user where username = #{username}
+		select s.* , r.en_name as roleText , r.websocket_params , r.is_del , r.is_shift , r.department_id ,r.role_id from sys_user s
+		LEFT JOIN sys_user_role ur on ur.user_id = s.user_id
+		JOIN sys_role r on ur.role_id = r.role_id
+		where username = #{username}
 	</select>
 
 	<insert id="save" parameterType="org.spmul.entity.shiro.SysUserEntity" useGeneratedKeys="true" keyProperty="userId">

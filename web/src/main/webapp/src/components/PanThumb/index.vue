@@ -5,7 +5,7 @@
         <slot />
       </div>
     </div>
-    <img :src="image" class="pan-thumb">
+    <img src="@/assets/avatar_images/user.gif" class="pan-thumb">
   </div>
 </template>
 
@@ -15,7 +15,7 @@ export default {
   props: {
     image: {
       type: String,
-      required: true
+      required: false
     },
     zIndex: {
       type: Number,

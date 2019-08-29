@@ -1,6 +1,7 @@
 import request from '@/utils/request'
 
 export function getRoutes() {
+  console.log('请求了routes')
   return request({
     url: '/routes',
     method: 'get'

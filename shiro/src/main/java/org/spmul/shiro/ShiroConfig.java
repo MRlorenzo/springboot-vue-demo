@@ -76,12 +76,11 @@ public class ShiroConfig  {
         Map<String, String> filterChainDefinitionMap = new LinkedHashMap<>();
 
         //退出过滤器(内置)
-        filterChainDefinitionMap.put("/login/doLogout","logout");
+        filterChainDefinitionMap.put("/user/logout","logout");
 
         //匿名可以访问，也是就游客模式
         filterChainDefinitionMap.put("/index.html/**","anon");
-        filterChainDefinitionMap.put("/login/**","anon");
-        filterChainDefinitionMap.put("/assets/**","anon");
+        filterChainDefinitionMap.put("/user/login","anon");
         filterChainDefinitionMap.put("/static/**","anon");
 
         //坑二: 过滤链是顺序执行，从上而下，一般讲/** 放到最下面
