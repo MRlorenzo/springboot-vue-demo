@@ -51,7 +51,7 @@
 	<select id="queryByRoleId" resultMap="allInfo">
 		select p.* from sys_permission p
 		LEFT JOIN sys_role_permission rp on rp.permission_id = p.id
-		JOIN sys_role r on r.id = rp.role_id where p.pid=0 and r.id = #{value};
+		where p.pid = 0 and rp.role_id = #{value};
 	</select>
 
 	<select id="queryRouteItemByUserId" resultType="org.spmul.entity.shiro.RouteEntity">
