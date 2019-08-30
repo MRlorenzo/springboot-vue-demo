@@ -24,13 +24,11 @@
 
 
 	<resultMap id="sysRoleMap" type="org.spmul.entity.shiro.SysRoleEntity">
-		<result property="roleId" column="role_id"/>
-		<result property="roleName" column="role_name"/>
-		<result property="enName" column="en_name"/>
-		<result property="remark" column="remark"/>
+		<result property="id" column="id"/>
+		<result property="name" column="name"/>
+		<result property="description" column="description"/>
 		<result property="createUserId" column="create_user_id"/>
 		<result property="createTime" column="create_time"/>
-		<result property="webSocketParams" column="websocket_params"/>
 		<result property="isShift" column="is_shift"/>
 		<result property="isDel" column="is_del"/>
 		<result property="departmentId" column="department_id"/>
@@ -39,6 +37,7 @@
 
 	<resultMap id="allInfo" type="org.spmul.entity.shiro.SysRoleEntity" extends="sysRoleMap">
 		<association property="departmentInfo" column="department_id" select="org.spmul.dao.shiro.DepartmentDao.queryObject"/>
+		<collection property="routes" column="id" select="org.spmul.dao.shiro.RouteDao.queryByRoleId"/>
 	</resultMap>
 
 
@@ -48,11 +47,8 @@
 
 	<sql id="queryListWhereSql">
 		where is_del = 0
-		<if test="roleName != null and roleName.trim() != ''">
-			and `role_name` like concat('%',#{roleName},'%')
-		</if>
-		<if test="enName != null and enName.trim() !=''">
-			and `en_name` like concat('%',#{enName} , '%')
+		<if test="name != null and name.trim() != ''">
+			and `role_name` like concat('%',#{name},'%')
 		</if>
 		<if test="createUserId != null">
 			and create_user_id = #{createUserId}
@@ -89,27 +85,13 @@
 		<include refid="queryListWhereSql"/>
 	</select>
 
-	<select id="findWebSocketParamsByUserId" parameterType="long" resultType="string">
-		SELECT
-			GROUP_CONCAT(websocket_params)
-		FROM
-			sys_user_role sur,
-			sys_role sr
-		WHERE
-			sur.role_id = sr.role_id
-		AND user_id = #{id} and sr.is_del=0;
-	</select>
-
-	<insert id="save" parameterType="org.spmul.entity.shiro.SysRoleEntity" useGeneratedKeys="true" keyProperty="roleId">
+	<insert id="save" parameterType="org.spmul.entity.shiro.SysRoleEntity" useGeneratedKeys="true" keyProperty="id">
 		insert into sys_role
 		(
-			`role_id`,
-			`role_name`,
-			`en_name`,
-			`remark`,
+			`name`,
+			`description`,
 			`create_user_id`,
 			`create_time`,
-			`websocket_params`,
 			`is_shift`,
 			`is_del`,
 			`department_id`,
@@ -117,13 +99,10 @@
 		)
 		values
 		(
-			#{roleId},
-			#{roleName},
-			#{enName},
-			#{remark},
+			#{name},
+			#{description},
 			#{createUserId},
 			#{createTime},
-			#{webSocketParams},
 			#{isShift},
 			#{isDel},
 			#{departmentId},
@@ -134,60 +113,41 @@
 	<update id="update" parameterType="org.spmul.entity.shiro.SysRoleEntity">
 		update sys_role
 		<set>
-			<if test="roleName != null">`role_name` = #{roleName}, </if>
-			<if test="enName != null">`en_name` = #{enName}, </if>
-			<if test="remark != null">`remark` = #{remark} ,</if>
-			<if test="webSocketParams!=null">`websocket_params` = #{webSocketParams},</if>
+			<if test="name != null">`name` = #{name}, </if>
+			<if test="description != null">`description` = #{description} ,</if>
 			<if test="isShift!=null">`is_shift` = #{isShift},</if>
 			<if test="isDel!=null">`is_del` = #{isDel},</if>
 			<if test="departmentId!=null">`department_id` = #{departmentId},</if>
 			<if test="sort!=null">`sort` = #{sort}</if>
 		</set>
-		where role_id = #{roleId}
+		where id = #{id}
 	</update>
 
-	<!--<delete id="deleteBatch">
-		delete from sys_role where role_id in
-		<foreach item="roleId" collection="array" open="(" separator="," close=")">
-			#{roleId}
-		</foreach>
-		;
-		delete from sys_role_menu where role_id in
-		<foreach item="roleId" collection="array" open="(" separator="," close=")">
-			#{roleId}
-		</foreach>
-		;
-		delete from sys_user_role where role_id in
-		<foreach item="roleId" collection="array" open="(" separator="," close=")">
-			#{roleId}
-		</foreach>
-	</delete>-->
-
 	<update id="deleteBatch">
-		update sys_role  set is_del=1 where role_id in
-		<foreach item="roleId" collection="array" open="(" separator="," close=")">
-			#{roleId}
+		update sys_role  set is_del=1 where id in
+		<foreach item="id" collection="array" open="(" separator="," close=")">
+			#{id}
 		</foreach>
 	</update>
 
 	<!-- 查询用户创建的角色ID列表 -->
 	<select id="queryRoleIdList" resultType="long">
-		select role_id from sys_role where create_user_id = #{createUserId}  and is_del=0
+		select id from sys_role where create_user_id = #{createUserId}  and is_del=0
 	</select>
 
 	<!-- 查询用户创建的角色ID列表 -->
 	<select id="queryRoleIdListByUserId" resultType="long">
-		SELECT DISTINCT b.role_id
+		SELECT DISTINCT b.id
 		FROM
 			sys_user_role a,
 			sys_role b
 		WHERE
-			a.role_id = b.role_id AND user_id = #{userId}
+			a.role_id = b.id AND user_id = #{userId}
 		ORDER BY b.sort
 	</select>
 
 	<select id="queryBatchByUserId" resultType="org.spmul.entity.shiro.SysRoleEntity">
-		select * from sys_role where role_id in (
+		select * from sys_role where id in (
 		select role_id from sys_user_role where user_id=#{userId}
 		)
 		and is_del=0 order by sort asc
@@ -200,7 +160,7 @@
 
 
 	<select id="queryByString" resultType="org.spmul.entity.shiro.SysRoleEntity">
-		select * from sys_role where role_name=#{value} or en_name=#{value}
+		select * from sys_role where name=#{value}
 	</select>
 
 </mapper>

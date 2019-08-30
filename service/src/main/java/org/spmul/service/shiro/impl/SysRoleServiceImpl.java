@@ -18,8 +18,12 @@
 package org.spmul.service.shiro.impl;
 
 
+import org.spmul.common.util.RRException;
 import org.spmul.dao.shiro.SysRoleDao;
+import org.spmul.dao.shiro.SysRolePermissionDao;
+import org.spmul.entity.shiro.RouteEntity;
 import org.spmul.entity.shiro.SysRoleEntity;
+import org.spmul.entity.shiro.SysRolePermissionEntity;
 import org.spmul.service.impl.BaseServiceImpl;
 import org.spmul.service.shiro.SysRoleService;
 import org.spmul.service.shiro.SysUserService;
@@ -27,8 +31,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
+
 import org.spmul.common.base.BaseDao;
 /**
  * 角色
@@ -43,7 +50,7 @@ public class SysRoleServiceImpl extends BaseServiceImpl<SysRoleEntity> implement
     private SysRoleDao sysRoleDao;
 
     @Autowired
-    private SysUserService sysUserService;
+    private SysRolePermissionDao sysRolePermissionDao;
 
     @Override
     public BaseDao<SysRoleEntity> getBaseDao() {
@@ -55,30 +62,61 @@ public class SysRoleServiceImpl extends BaseServiceImpl<SysRoleEntity> implement
         return sysRoleDao.queryObject(roleId);
     }
 
+    private void assertNoEmpty(SysRoleEntity role){
+        if( role.getRoutes() == null){
+            throw new RRException("routes不能为空");
+        }
+    }
+
     @Override
     @Transactional
     public void save(SysRoleEntity role) {
 
+        /* 检查routes 是否为空*/
+        assertNoEmpty(role);
+
         role.setCreateTime(new Date());
         role.setIsDel(0);
+
         sysRoleDao.save(role);
 
+        /* 保存新的角色与路由关联 */
+        List<SysRolePermissionEntity> list = getRolePermissionListForRoutes(role.getId(), role.getRoutes());
+        sysRolePermissionDao.saveBatch(list);
     }
 
     @Override
     @Transactional
     public int update(SysRoleEntity role) {
 
-        int update = sysRoleDao.update(role);
+        /* 检查routes 是否为空*/
+        assertNoEmpty(role);
+        /* 清空旧的角色与路由关联 */
+        sysRolePermissionDao.delete(role.getId());
 
+        /* 保存新的角色与路由关联 */
+        List<SysRolePermissionEntity> list = getRolePermissionListForRoutes(role.getId(), role.getRoutes());
+        sysRolePermissionDao.saveBatch(list);
+
+        int update = sysRoleDao.update(role);
         return update;
     }
 
-    @Override
-    @Transactional
-    public void deleteBatch(Long[] roleIds) {
-        sysRoleDao.deleteBatch(roleIds);
+    private List<SysRolePermissionEntity> getRolePermissionListForRoutes(Long roleId, List<RouteEntity> routes){
+        List<SysRolePermissionEntity> rps = new ArrayList<>();
+        routes.forEach(route ->{
+            SysRolePermissionEntity rp = new SysRolePermissionEntity();
+            rp.setRoleId(roleId);
+            rp.setPermissionId(route.getId());
+            rps.add(rp);
+            if (route.getChildren() != null && route.getChildren().size()>0){
+                List<SysRolePermissionEntity> list = getRolePermissionListForRoutes(roleId, route.getChildren());
+                rps.addAll(list);
+            }
+        });
+        return rps;
     }
+
 
     @Override
     public List<Long> queryRoleIdList(Long createUserId) {

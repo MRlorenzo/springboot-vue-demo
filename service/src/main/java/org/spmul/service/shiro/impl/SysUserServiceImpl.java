@@ -107,7 +107,7 @@ public class SysUserServiceImpl extends BaseServiceImpl<SysUserEntity> implement
         sysUserDao.save(user);
 
         //保存用户与角色关系
-        sysUserRoleService.saveOrUpdate(user.getUserId(), user.getRoleIdList());
+        sysUserRoleService.saveOrUpdate(user.getUserId(), user.getRoles().stream().map(role->role.getId()).collect(Collectors.toList()));
     }
 
     private boolean checkFreePwd(String pwd){
@@ -125,7 +125,7 @@ public class SysUserServiceImpl extends BaseServiceImpl<SysUserEntity> implement
         }
         int update = sysUserDao.update(user);
         //保存用户与角色关系
-        sysUserRoleService.saveOrUpdate(user.getUserId(), user.getRoleIdList());
+        sysUserRoleService.saveOrUpdate(user.getUserId(),  user.getRoles().stream().map(role->role.getId()).collect(Collectors.toList()));
         return update;
     }
 

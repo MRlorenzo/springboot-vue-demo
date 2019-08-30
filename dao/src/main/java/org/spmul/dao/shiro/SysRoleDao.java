@@ -24,8 +24,6 @@ public interface SysRoleDao extends BaseDao<SysRoleEntity> {
      */
     List<Long> queryRoleIdListByUserId(Long userId);
 
-    String findWebSocketParamsByUserId(Long userId);
-
     List<SysRoleEntity> queryBatchByUserId(Long userId);
 
     /**
@@ -42,4 +40,5 @@ public interface SysRoleDao extends BaseDao<SysRoleEntity> {
      * @return
      */
     SysRoleEntity queryByString(String value);
+
 }

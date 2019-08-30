@@ -5,9 +5,15 @@
     </el-button>
 
     <el-table :data="rolesList" style="width: 100%;margin-top:30px;" border>
-      <el-table-column align="center" label="Role Key" width="220">
+      <!-- 已弃用 key 字段-->
+      <!--<el-table-column align="center" label="Role Key" width="220">-->
+        <!--<template slot-scope="scope">-->
+          <!--{{ scope.row.key }}-->
+        <!--</template>-->
+      <!--</el-table-column>-->
+      <el-table-column align="center" label="Department" width="220">
         <template slot-scope="scope">
-          {{ scope.row.key }}
+          {{ scope.row.departmentInfo.departmentCode }}
         </template>
       </el-table-column>
       <el-table-column align="center" label="Role Name" width="220">
@@ -34,9 +40,13 @@
 
     <el-dialog :visible.sync="dialogVisible" :title="dialogType==='edit'?'Edit Role':'New Role'">
       <el-form :model="role" label-width="80px" label-position="left">
+
+        <!--角色名称-->
         <el-form-item label="Name">
           <el-input v-model="role.name" placeholder="Role Name" />
         </el-form-item>
+
+        <!-- 描述-->
         <el-form-item label="Desc">
           <el-input
             v-model="role.description"
@@ -45,8 +55,22 @@
             placeholder="Role Description"
           />
         </el-form-item>
+
+        <!-- 部门-->
+        <el-form-item label="Dep">
+          <el-select v-model="role.departmentId" placeholder="Department">
+            <el-option
+              v-for="dep in departments"
+              :key="dep.departmentId"
+              :label="dep.departmentCode"
+              :value="dep.departmentId">
+            </el-option>
+          </el-select>
+        </el-form-item>
+
+
         <el-form-item label="Menus">
-          <el-tree ref="tree" :check-strictly="checkStrictly" :data="routesData" :props="defaultProps" show-checkbox node-key="path" class="permission-tree" />
+          <el-tree ref="tree" :check-strictly="checkStrictly" :data="routesData" :props="defaultProps" show-checkbox node-key="id" class="permission-tree" />
         </el-form-item>
       </el-form>
       <div style="text-align:right;">
@@ -63,14 +87,18 @@
 
 <script>
 import path from 'path'
-import { deepClone } from '@/utils'
+import { deepClone, checkOrParse2Json } from '@/utils'
 import { getRoutes, getRoles, addRole, deleteRole, updateRole } from '@/api/role'
+import { getDepartments } from '@/api/remote-search'
 import i18n from '@/lang'
 
 const defaultRole = {
-  key: '',
   name: '',
   description: '',
+  departmentInfo: {
+    departmentCode: ''
+  },
+  departmentId: null,
   routes: []
 }
 
@@ -80,6 +108,7 @@ export default {
       role: Object.assign({}, defaultRole),
       routes: [],
       rolesList: [],
+      departments: [],
       dialogVisible: false,
       dialogType: 'new',
       checkStrictly: false,
@@ -98,17 +127,22 @@ export default {
     // Mock: get all routes and roles list from server
     this.getRoutes()
     this.getRoles()
+    this.getDepartments()
   },
   methods: {
     async getRoutes() {
       const res = await getRoutes()
-      this.serviceRoutes = res.data
-      const routes = this.generateRoutes(res.data)
+      this.serviceRoutes = res.list
+      const routes = this.generateRoutes(res.list)
       this.routes = this.i18n(routes)
     },
     async getRoles() {
       const res = await getRoles()
-      this.rolesList = res.data
+      this.rolesList = res.list
+    },
+    async getDepartments(){
+      const res = await getDepartments()
+      this.departments = res.list
     },
     i18n(routes) {
       const app = routes.map(route => {
@@ -121,7 +155,7 @@ export default {
       return app
     },
     // Reshape the routes structure so that it looks the same as the sidebar
-    generateRoutes(routes, basePath = '/') {
+    generateRoutes(routes) {
       const res = []
 
       for (let route of routes) {
@@ -129,20 +163,21 @@ export default {
         if (route.hidden) { continue }
 
         const onlyOneShowingChild = this.onlyOneShowingChild(route.children, route)
-
         if (route.children && onlyOneShowingChild && !route.alwaysShow) {
           route = onlyOneShowingChild
         }
 
-        const data = {
-          path: path.resolve(basePath, route.path),
-          title: route.meta && route.meta.title
+        let meta = checkOrParse2Json(route.meta)
 
+        const data = {
+          path: route.path,
+          title: meta && meta.title,
+          id: route.id
         }
 
         // recursive child routes
         if (route.children) {
-          data.children = this.generateRoutes(route.children, data.path)
+          data.children = this.generateRoutes(route.children)
         }
         res.push(data)
       }
@@ -188,7 +223,7 @@ export default {
         type: 'warning'
       })
         .then(async() => {
-          await deleteRole(row.key)
+          await deleteRole(row.departmentId)
           this.rolesList.splice($index, 1)
           this.$message({
             type: 'success',
@@ -197,18 +232,17 @@ export default {
         })
         .catch(err => { console.error(err) })
     },
-    generateTree(routes, basePath = '/', checkedKeys) {
+    generateTree(routes, checkedKeys) {
       const res = []
 
       for (const route of routes) {
-        const routePath = path.resolve(basePath, route.path)
 
         // recursive child routes
         if (route.children) {
-          route.children = this.generateTree(route.children, routePath, checkedKeys)
+          route.children = this.generateTree(route.children, checkedKeys)
         }
 
-        if (checkedKeys.includes(routePath) || (route.children && route.children.length >= 1)) {
+        if (checkedKeys.includes(route.id) || (route.children && route.children.length >= 1)) {
           res.push(route)
         }
       }
@@ -218,7 +252,7 @@ export default {
       const isEdit = this.dialogType === 'edit'
 
       const checkedKeys = this.$refs.tree.getCheckedKeys()
-      this.role.routes = this.generateTree(deepClone(this.serviceRoutes), '/', checkedKeys)
+      this.role.routes = this.generateTree(deepClone(this.serviceRoutes), checkedKeys)
 
       if (isEdit) {
         await updateRole(this.role.key, this.role)
@@ -229,18 +263,17 @@ export default {
           }
         }
       } else {
-        const { data } = await addRole(this.role)
-        this.role.key = data.key
-        this.rolesList.push(this.role)
+        await addRole(this.role)
+
+        this.getRoles()
       }
 
-      const { description, key, name } = this.role
+      const { description, name } = this.role
       this.dialogVisible = false
       this.$notify({
         title: 'Success',
         dangerouslyUseHTMLString: true,
         message: `
-            <div>Role Key: ${key}</div>
             <div>Role Nmae: ${name}</div>
             <div>Description: ${description}</div>
           `,
@@ -249,6 +282,8 @@ export default {
     },
     // reference: src/view/layout/components/Sidebar/SidebarItem.vue
     onlyOneShowingChild(children = [], parent) {
+      // 当children为null而不是undefined的时候，children参数的默认值会被抛弃，会导致children.filter()报错
+      children = children || []
       let onlyOneChild = null
       const showingChildren = children.filter(item => !item.hidden)
 

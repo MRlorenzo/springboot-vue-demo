@@ -36,22 +36,17 @@ public class SysRoleEntity implements Serializable {
     /**
      * 角色ID
      */
-    private Long roleId;
+    private Long id;
 
     /**
      * 角色名称
      */
-    private String roleName;
-
-    /**
-     * 英文角色名称
-     */
-    private String enName;
+    private String name;
 
     /**
      * 备注
      */
-    private String remark;
+    private String description;
 
     /**
      * 创建者ID
@@ -62,8 +57,6 @@ public class SysRoleEntity implements Serializable {
      * 创建时间
      */
     private Date createTime;
-
-    private String webSocketParams;
 
 
 	/**
@@ -94,5 +87,9 @@ public class SysRoleEntity implements Serializable {
 	 */
 	private Integer sort;
 
+	/**
+	 * 路由清单
+	* */
+	private List<RouteEntity> routes;
 
 }

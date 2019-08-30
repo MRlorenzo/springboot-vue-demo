@@ -43,8 +43,14 @@ public class UserController {
 
     }
 
-    @RequestMapping("/logout")
-    public R findMyPlayRecord(){
+    /**
+     * 不用我们去实现退出，只要去访问一个退出的url（该 url是可以不存在），
+     * 由LogoutFilter拦截住，清除session
+     * 当我们在shiroConfig中配置了logoutFilter时，该url不会经过此方法。
+     * @return
+     */
+    @GetMapping("/logout")
+    public R logout(){
 
         Subject subject = SecurityUtils.getSubject();
 

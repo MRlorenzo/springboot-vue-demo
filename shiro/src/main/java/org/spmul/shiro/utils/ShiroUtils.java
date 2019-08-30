@@ -6,9 +6,12 @@ import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.session.Session;
 import org.apache.shiro.subject.Subject;
 import org.spmul.entity.dto.UserInfo;
+import org.spmul.entity.shiro.SysRoleEntity;
 import org.spmul.entity.shiro.SysUserEntity;
 
 import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class ShiroUtils {
     public static Session getSession() {
@@ -31,10 +34,12 @@ public class ShiroUtils {
         UserInfo userInfo = new UserInfo();
         SysUserEntity userEntity = ShiroUtils.getUserEntity();
 
+        List<SysRoleEntity> roles = userEntity.getRoles();
+
         userInfo.setName(userEntity.getSurname()+ " " + userEntity.getGivenNames());
         userInfo.setIntroduction(userEntity.getRemark());
-        userInfo.setRoles(Arrays.asList(userEntity.getRoleText()));
-        userInfo.setRoleIds(Arrays.asList(userEntity.getRoleId()));
+        userInfo.setRoles(roles.stream().map(SysRoleEntity::getName).collect(Collectors.toList()));
+        userInfo.setRoleIds(roles.stream().map(SysRoleEntity::getId).collect(Collectors.toList()));
         return userInfo;
     }
 

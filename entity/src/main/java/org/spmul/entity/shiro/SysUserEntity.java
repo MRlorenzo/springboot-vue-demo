@@ -65,10 +65,6 @@ public class SysUserEntity implements Serializable{
 	 */
 	private String headPortrait;
 
-    /**
-     * 角色ID列表
-     */
-    private List<Long> roleIdList;
 
     /**
      * 创建者ID
@@ -80,10 +76,6 @@ public class SysUserEntity implements Serializable{
      */
     private Date createTime;
 
-	//出生日期
-	private Date hiredate;
-
-    private String webSocketParams;
 
 	/**
 	 * 部门id
@@ -97,20 +89,10 @@ public class SysUserEntity implements Serializable{
 	 */
 	private DepartmentEntity departmentInfo;
 
-
 	/**
-	 * 部门名称  -- 用于导入
-	 */
-	private String departmentText;
-	/**
-	 * 角色名称  -- 用于导入
-	 */
-	private String roleText;
-
-
-	private Long roleId;
-
+	 * 角色信息
+	 * */
+	private List<SysRoleEntity> roles;
 
 	private String remark;
-
 }

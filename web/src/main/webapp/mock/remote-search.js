@@ -10,6 +10,23 @@ for (let i = 0; i < count; i++) {
 }
 NameList.push({ name: 'mock-Pan' })
 
+const Departments = [
+  {
+    departmentId: 1,
+    name: '董事长',
+    enName: 'President',
+    departmentCode:'President',
+    sort:1
+  },
+  {
+    departmentId: 2,
+    name: '人事',
+    enName: 'HR',
+    departmentCode:'HR',
+    sort:2
+  }
+]
+
 export default [
   // username search
   {
@@ -45,6 +62,18 @@ export default [
             'status|1': ['success', 'pending']
           }]
         }
+      }
+    }
+  },
+
+  // department
+  {
+    url: '/department/departments',
+    type: 'get',
+    response: _=>{
+      return {
+        code: 0,
+        list: Departments
       }
     }
   }

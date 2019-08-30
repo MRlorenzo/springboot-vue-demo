@@ -74,6 +74,7 @@ export const constantRoutes = [
 
 export const asyncRoutes = [
   {
+    id: 1,
     path: '/permission',
     component: 'layout/Layout',
     redirect: '/permission/index',
@@ -85,6 +86,7 @@ export const asyncRoutes = [
     },
     children: [
       {
+        id: 2,
         path: 'page',
         component: 'views/permission/page',
         name: 'PagePermission',
@@ -94,6 +96,7 @@ export const asyncRoutes = [
         }
       },
       {
+        id: 3,
         path: 'directive',
         component: 'views/permission/directive',
         name: 'DirectivePermission',
@@ -102,6 +105,7 @@ export const asyncRoutes = [
         }
       },
       {
+        id: 4,
         path: 'role',
         component: 'views/permission/role',
         name: 'RolePermission',
@@ -114,10 +118,12 @@ export const asyncRoutes = [
   },
 
   {
+    id: 5,
     path: '/icon',
     component: 'layout/Layout',
     children: [
       {
+        id:6 ,
         path: 'index',
         component: 'views/icons/index',
         name: 'Icons',
@@ -127,6 +133,7 @@ export const asyncRoutes = [
   },
 
   {
+    id: 7,
     path: '/components',
     component: 'layout/Layout',
     redirect: 'noRedirect',
@@ -137,84 +144,98 @@ export const asyncRoutes = [
     },
     children: [
       {
+        id: 8,
         path: 'tinymce',
         component: 'views/components-demo/tinymce',
         name: 'TinymceDemo',
         meta: { title: 'tinymce' }
       },
       {
+        id: 9,
         path: 'markdown',
         component: 'views/components-demo/markdown',
         name: 'MarkdownDemo',
         meta: { title: 'markdown' }
       },
       {
+        id: 10,
         path: 'json-editor',
         component: 'views/components-demo/json-editor',
         name: 'JsonEditorDemo',
         meta: { title: 'jsonEditor' }
       },
       {
+        id: 11,
         path: 'split-pane',
         component: 'views/components-demo/split-pane',
         name: 'SplitpaneDemo',
         meta: { title: 'splitPane' }
       },
       {
+        id: 12,
         path: 'avatar-upload',
         component: 'views/components-demo/avatar-upload',
         name: 'AvatarUploadDemo',
         meta: { title: 'avatarUpload' }
       },
       {
+        id: 13,
         path: 'dropzone',
         component: 'views/components-demo/dropzone',
         name: 'DropzoneDemo',
         meta: { title: 'dropzone' }
       },
       {
+        id: 14,
         path: 'sticky',
         component: 'views/components-demo/sticky',
         name: 'StickyDemo',
         meta: { title: 'sticky' }
       },
       {
+        id: 15,
         path: 'count-to',
         component: 'views/components-demo/count-to',
         name: 'CountToDemo',
         meta: { title: 'countTo' }
       },
       {
+        id: 16,
         path: 'mixin',
         component: 'views/components-demo/mixin',
         name: 'ComponentMixinDemo',
         meta: { title: 'componentMixin' }
       },
       {
+        id: 17,
         path: 'back-to-top',
         component: 'views/components-demo/back-to-top',
         name: 'BackToTopDemo',
         meta: { title: 'backToTop' }
       },
       {
+        id: 18,
         path: 'drag-dialog',
         component: 'views/components-demo/drag-dialog',
         name: 'DragDialogDemo',
         meta: { title: 'dragDialog' }
       },
       {
+        id: 19,
         path: 'drag-select',
         component: 'views/components-demo/drag-select',
         name: 'DragSelectDemo',
         meta: { title: 'dragSelect' }
       },
       {
+        id: 20,
         path: 'dnd-list',
         component: 'views/components-demo/dnd-list',
         name: 'DndListDemo',
         meta: { title: 'dndList' }
       },
       {
+        id: 21,
         path: 'drag-kanban',
         component: 'views/components-demo/drag-kanban',
         name: 'DragKanbanDemo',
@@ -223,6 +244,7 @@ export const asyncRoutes = [
     ]
   },
   {
+    id: 22,
     path: '/charts',
     component: 'layout/Layout',
     redirect: 'noRedirect',
@@ -233,18 +255,21 @@ export const asyncRoutes = [
     },
     children: [
       {
+        id: 23,
         path: 'keyboard',
         component: 'views/charts/keyboard',
         name: 'KeyboardChart',
         meta: { title: 'keyboardChart', noCache: true }
       },
       {
+        id: 24,
         path: 'line',
         component: 'views/charts/line',
         name: 'LineChart',
         meta: { title: 'lineChart', noCache: true }
       },
       {
+        id: 25,
         path: 'mixchart',
         component: 'views/charts/mixChart',
         name: 'MixChart',
@@ -313,43 +338,45 @@ export const asyncRoutes = [
   //   ]
   // },
 
-  {
-    path: '/example',
-    component: 'layout/Layout',
-    redirect: '/example/list',
-    name: 'Example',
-    meta: {
-      title: 'example',
-      icon: 'example'
-    },
-    children: [
-      {
-        path: 'create',
-        component: 'views/example/create',
-        name: 'CreateArticle',
-        meta: { title: 'createArticle', icon: 'edit' }
-      },
-      {
-        path: 'edit/:id(\\d+)',
-        component: 'views/example/edit',
-        name: 'EditArticle',
-        meta: { title: 'editArticle', noCache: true },
-        hidden: true
-      },
-      {
-        path: 'list',
-        component: 'views/example/list',
-        name: 'ArticleList',
-        meta: { title: 'articleList', icon: 'list' }
-      }
-    ]
-  },
+  // {
+  //   path: '/example',
+  //   component: 'layout/Layout',
+  //   redirect: '/example/list',
+  //   name: 'Example',
+  //   meta: {
+  //     title: 'example',
+  //     icon: 'example'
+  //   },
+  //   children: [
+  //     {
+  //       path: 'create',
+  //       component: 'views/example/create',
+  //       name: 'CreateArticle',
+  //       meta: { title: 'createArticle', icon: 'edit' }
+  //     },
+  //     {
+  //       path: 'edit/:id(\\d+)',
+  //       component: 'views/example/edit',
+  //       name: 'EditArticle',
+  //       meta: { title: 'editArticle', noCache: true },
+  //       hidden: true
+  //     },
+  //     {
+  //       path: 'list',
+  //       component: 'views/example/list',
+  //       name: 'ArticleList',
+  //       meta: { title: 'articleList', icon: 'list' }
+  //     }
+  //   ]
+  // },
 
   {
+    id: 26,
     path: '/tab',
     component: 'layout/Layout',
     children: [
       {
+        id: 27,
         path: 'index',
         component: 'views/tab/index',
         name: 'Tab',
@@ -359,6 +386,7 @@ export const asyncRoutes = [
   },
 
   {
+    id: 28,
     path: '/error',
     component: 'layout/Layout',
     redirect: 'noRedirect',
@@ -369,12 +397,14 @@ export const asyncRoutes = [
     },
     children: [
       {
+        id: 29,
         path: '401',
         component: 'views/error-page/401',
         name: 'Page401',
         meta: { title: 'page401', noCache: true }
       },
       {
+        id: 30,
         path: '404',
         component: 'views/error-page/404',
         name: 'Page404',
@@ -384,11 +414,13 @@ export const asyncRoutes = [
   },
 
   {
+    id: 31,
     path: '/error-log',
     component: 'layout/Layout',
     redirect: 'noRedirect',
     children: [
       {
+        id: 32,
         path: 'log',
         component: 'views/error-log/index',
         name: 'ErrorLog',
@@ -398,6 +430,7 @@ export const asyncRoutes = [
   },
 
   {
+    id: 33,
     path: '/excel',
     component: 'layout/Layout',
     redirect: '/excel/export-excel',
@@ -408,24 +441,28 @@ export const asyncRoutes = [
     },
     children: [
       {
+        id: 34,
         path: 'export-excel',
         component: 'views/excel/export-excel',
         name: 'ExportExcel',
         meta: { title: 'exportExcel' }
       },
       {
+        id: 35,
         path: 'export-selected-excel',
         component: 'views/excel/select-excel',
         name: 'SelectExcel',
         meta: { title: 'selectExcel' }
       },
       {
+        id: 36,
         path: 'export-merge-header',
         component: 'views/excel/merge-header',
         name: 'MergeHeader',
         meta: { title: 'mergeHeader' }
       },
       {
+        id: 37,
         path: 'upload-excel',
         component: 'views/excel/upload-excel',
         name: 'UploadExcel',
@@ -435,6 +472,7 @@ export const asyncRoutes = [
   },
 
   {
+    id: 38,
     path: '/zip',
     component: 'layout/Layout',
     redirect: '/zip/download',
@@ -442,6 +480,7 @@ export const asyncRoutes = [
     meta: { title: 'zip', icon: 'zip' },
     children: [
       {
+        id: 39,
         path: 'download',
         component: 'views/zip/index',
         name: 'ExportZip',
@@ -451,11 +490,13 @@ export const asyncRoutes = [
   },
 
   {
+    id: 40,
     path: '/pdf',
     component: 'layout/Layout',
     redirect: '/pdf/index',
     children: [
       {
+        id: 41,
         path: 'index',
         component: 'views/pdf/index',
         name: 'PDF',
@@ -464,17 +505,20 @@ export const asyncRoutes = [
     ]
   },
   {
+    id: 42,
     path: '/pdf/download',
     component: 'views/pdf/download',
     hidden: true
   },
 
   {
+    id: 43,
     path: '/theme',
     component: 'layout/Layout',
     redirect: 'noRedirect',
     children: [
       {
+        id: 44,
         path: 'index',
         component: 'views/theme/index',
         name: 'Theme',
@@ -484,11 +528,13 @@ export const asyncRoutes = [
   },
 
   {
+    id: 45,
     path: '/clipboard',
     component: 'layout/Layout',
     redirect: 'noRedirect',
     children: [
       {
+        id: 46,
         path: 'index',
         component: 'views/clipboard/index',
         name: 'ClipboardDemo',
@@ -498,10 +544,12 @@ export const asyncRoutes = [
   },
 
   {
+    id: 47,
     path: '/i18n',
     component: 'layout/Layout',
     children: [
       {
+        id: 48,
         path: 'index',
         component: 'views/i18n-demo/index',
         name: 'I18n',

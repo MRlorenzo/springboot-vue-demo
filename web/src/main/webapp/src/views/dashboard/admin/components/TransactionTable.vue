@@ -33,6 +33,9 @@ export default {
       return statusMap[status]
     },
     orderNoFilter(str) {
+      if (typeof str !== 'string'){
+        return ''
+      }
       return str.substring(0, 30)
     }
   },

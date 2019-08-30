@@ -51,13 +51,13 @@
 	<select id="queryByRoleId" resultMap="allInfo">
 		select p.* from sys_permission p
 		LEFT JOIN sys_role_permission rp on rp.permission_id = p.id
-		JOIN sys_role r on r.role_id = rp.role_id where p.pid=0 and r.role_id = #{value};
+		JOIN sys_role r on r.id = rp.role_id where p.pid=0 and r.id = #{value};
 	</select>
 
 	<select id="queryRouteItemByUserId" resultType="org.spmul.entity.shiro.RouteEntity">
 		SELECT p.* FROM sys_permission p
 		LEFT JOIN sys_role_permission rp ON rp.permission_id = p.id
-		JOIN sys_role r ON r.role_id = rp.role_id
+		JOIN sys_role r ON r.id = rp.role_id
 		JOIN sys_user_role ur on ur.role_id = rp.role_id
 		JOIN sys_user u on u.user_id = ur.user_id
 		WHERE u.user_id = #{value};
@@ -66,7 +66,7 @@
 	<select id="queryPermissionsByUserId" resultType="string">
 		SELECT p.perms FROM sys_permission p
 		LEFT JOIN sys_role_permission rp ON rp.permission_id = p.id
-		JOIN sys_role r ON r.role_id = rp.role_id
+		JOIN sys_role r ON r.id = rp.role_id
 		JOIN sys_user_role ur on ur.role_id = rp.role_id
 		JOIN sys_user u on u.user_id = ur.user_id
 		WHERE u.user_id = #{value};

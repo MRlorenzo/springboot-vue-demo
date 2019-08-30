@@ -38,13 +38,14 @@
 		<result property="createTime" column="create_time"/>
 		<result property="headPortrait" column="head_portrait"/>
 		<result property="departmentId" column="department_id"/>
-		<result property="hiredate" column="hiredate"/>
 		<result property="remark" column="remark"/>
 	</resultMap>
 
 	<resultMap id="allInfo" type="org.spmul.entity.shiro.SysUserEntity" extends="sysUserMap">
 		<association property="departmentInfo" column="department_id" select="org.spmul.dao.shiro.DepartmentDao.queryObject"/>
+		<collection property="roles" column="user_id" select="org.spmul.dao.shiro.SysRoleDao.queryBatchByUserId"/>
 	</resultMap>
+
 
 
 
@@ -152,11 +153,8 @@
 		<include refid="queryListWhereSql"/>
 	</select>
 
-	<select id="queryByUserName" resultType="org.spmul.entity.shiro.SysUserEntity">
-		select s.* , r.en_name as roleText , r.websocket_params , r.is_del , r.is_shift , r.department_id ,r.role_id from sys_user s
-		LEFT JOIN sys_user_role ur on ur.user_id = s.user_id
-		JOIN sys_role r on ur.role_id = r.role_id
-		where username = #{username}
+	<select id="queryByUserName" resultMap="allInfo">
+		select *  from sys_user where username = #{username}
 	</select>
 
 	<insert id="save" parameterType="org.spmul.entity.shiro.SysUserEntity" useGeneratedKeys="true" keyProperty="userId">

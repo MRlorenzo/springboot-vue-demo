@@ -348,3 +348,14 @@ export function removeClass(ele, cls) {
     ele.className = ele.className.replace(reg, ' ')
   }
 }
+
+export function checkOrParse2Json( data ) {
+  if (typeof data === 'string'){
+    try {
+      data = JSON.parse(data)
+    }catch (e){
+      data = {}
+    }
+  }
+  return data;
+}

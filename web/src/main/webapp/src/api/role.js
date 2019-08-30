@@ -24,7 +24,7 @@ export function addRole(data) {
 
 export function updateRole(id, data) {
   return request({
-    url: `/permission/role/${id}`,
+    url: `/permission/role/update`,
     method: 'put',
     data
   })
@@ -32,7 +32,7 @@ export function updateRole(id, data) {
 
 export function deleteRole(id) {
   return request({
-    url: `/permission/role/${id}`,
+    url: `/permission/role/del/${id}`,
     method: 'delete'
   })
 }
