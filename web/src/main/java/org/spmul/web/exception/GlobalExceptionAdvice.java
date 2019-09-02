@@ -63,18 +63,18 @@ public class GlobalExceptionAdvice {
      */
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(MissingServletRequestParameterException.class)
-    public String handleMissingServletRequestParameterException(MissingServletRequestParameterException e) {
+    public R handleMissingServletRequestParameterException(MissingServletRequestParameterException e) {
         log.error("缺少请求参数", e);
-        return "缺少请求参数";
+        return R.error(400 , "缺少请求参数");
     }
     /**
      * 400 - Bad Request
      */
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(HttpMessageNotReadableException.class)
-    public String handleHttpMessageNotReadableException(HttpMessageNotReadableException e) {
+    public R handleHttpMessageNotReadableException(HttpMessageNotReadableException e) {
         log.error("参数解析失败", e);
-        return "参数解析失败";
+        return R.error(400 , "参数解析失败");
     }
 
     /**
@@ -82,14 +82,14 @@ public class GlobalExceptionAdvice {
      */
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public String handleMethodArgumentNotValidException(MethodArgumentNotValidException e) {
+    public R handleMethodArgumentNotValidException(MethodArgumentNotValidException e) {
         log.error("参数验证失败", e);
         BindingResult result = e.getBindingResult();
         FieldError error = result.getFieldError();
         String field = error.getField();
         String code = error.getDefaultMessage();
         String message = String.format("%s:%s", field, code);
-        return "参数验证失败="+message;
+        return R.error(400 , "参数验证失败="+message);
     }
 
     /**
@@ -97,14 +97,14 @@ public class GlobalExceptionAdvice {
      */
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(BindException.class)
-    public String handleBindException(BindException e) {
+    public R handleBindException(BindException e) {
         log.error("参数绑定失败", e);
         BindingResult result = e.getBindingResult();
         FieldError error = result.getFieldError();
         String field = error.getField();
         String code = error.getDefaultMessage();
         String message = String.format("%s:%s", field, code);
-        return "参数绑定失败="+message;
+        return R.error(400 , "参数绑定失败="+message);
     }
 
 
@@ -113,12 +113,12 @@ public class GlobalExceptionAdvice {
      */
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(ConstraintViolationException.class)
-    public String handleServiceException(ConstraintViolationException e) {
+    public R handleServiceException(ConstraintViolationException e) {
         log.error("参数验证失败", e);
         Set<ConstraintViolation<?>> violations = e.getConstraintViolations();
         ConstraintViolation<?> violation = violations.iterator().next();
         String message = violation.getMessage();
-        return "参数验证失败" + message;
+        return R.error(400 , "参数验证失败" + message);
     }
 
     /**
@@ -126,9 +126,9 @@ public class GlobalExceptionAdvice {
      */
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(ValidationException.class)
-    public String handleValidationException(ValidationException e) {
+    public R handleValidationException(ValidationException e) {
         log.error("参数验证失败", e);
-        return "参数验证失败";
+        return R.error(400 , "参数验证失败");
     }
 
     /**
@@ -136,9 +136,9 @@ public class GlobalExceptionAdvice {
      */
     @ResponseStatus(HttpStatus.NOT_FOUND)
     @ExceptionHandler(NoHandlerFoundException.class)
-    public String noHandlerFoundException(NoHandlerFoundException e) {
+    public R noHandlerFoundException(NoHandlerFoundException e) {
         log.error("Not Found", e);
-        return "Not Found="+e;
+        return R.error(400 , "Not Found="+e);
     }
 
 
@@ -147,9 +147,9 @@ public class GlobalExceptionAdvice {
      */
     @ResponseStatus(HttpStatus.UNSUPPORTED_MEDIA_TYPE)
     @ExceptionHandler(HttpMediaTypeNotSupportedException.class)
-    public String handleHttpMediaTypeNotSupportedException(HttpMediaTypeNotSupportedException e) {
+    public R handleHttpMediaTypeNotSupportedException(HttpMediaTypeNotSupportedException e) {
         log.error("不支持当前媒体类型", e);
-        return "content_type_not_supported";
+        return R.error(400 , "content_type_not_supported");
     }
 
     /**

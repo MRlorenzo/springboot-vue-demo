@@ -3,15 +3,16 @@ import VueI18n from 'vue-i18n'
 import Cookies from 'js-cookie'
 import elementEnLocale from 'element-ui/lib/locale/lang/en' // element-ui lang
 import elementZhLocale from 'element-ui/lib/locale/lang/zh-CN'// element-ui lang
-import elementEsLocale from 'element-ui/lib/locale/lang/es'// element-ui lang
-import elementJaLocale from 'element-ui/lib/locale/lang/ja'// element-ui lang
+// import elementEsLocale from 'element-ui/lib/locale/lang/es'// element-ui lang
+// import elementJaLocale from 'element-ui/lib/locale/lang/ja'// element-ui lang
 import enLocale from './en'
 import zhLocale from './zh'
-import esLocale from './es'
-import jaLocale from './ja'
+// import esLocale from './es'
+// import jaLocale from './ja'
 
 Vue.use(VueI18n)
 
+// 我们的项目只需要中英文
 const messages = {
   en: {
     ...enLocale,
@@ -20,15 +21,15 @@ const messages = {
   zh: {
     ...zhLocale,
     ...elementZhLocale
-  },
-  es: {
-    ...esLocale,
-    ...elementEsLocale
-  },
-  ja: {
-    ...jaLocale,
-    ...elementJaLocale
   }
+  // es: {
+  //   ...esLocale,
+  //   ...elementEsLocale
+  // },
+  // ja: {
+  //   ...jaLocale,
+  //   ...elementJaLocale
+  // }
 }
 export function getLanguage() {
   const chooseLanguage = Cookies.get('language')
@@ -46,7 +47,7 @@ export function getLanguage() {
 }
 const i18n = new VueI18n({
   // set locale
-  // options: en | zh | es
+  // options: en | zh
   locale: getLanguage(),
   // set locale messages
   messages

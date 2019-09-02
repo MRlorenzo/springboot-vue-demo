@@ -36,8 +36,8 @@ public class ShiroUtils {
 
         List<SysRoleEntity> roles = userEntity.getRoles();
 
-        userInfo.setName(userEntity.getSurname()+ " " + userEntity.getGivenNames());
-        userInfo.setIntroduction(userEntity.getRemark());
+        userInfo.setName(userEntity.getUsername());
+        userInfo.setIntroduction(userEntity.getDescription());
         userInfo.setRoles(roles.stream().map(SysRoleEntity::getName).collect(Collectors.toList()));
         userInfo.setRoleIds(roles.stream().map(SysRoleEntity::getId).collect(Collectors.toList()));
         return userInfo;

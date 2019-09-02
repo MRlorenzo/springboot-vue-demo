@@ -31,40 +31,9 @@ public class SysUserEntity implements Serializable{
 	private transient String freePwd;
 
     /**
-     * 邮箱
-     */
-    private String email;
-
-    /**
-     * 手机号
-     */
-    private String mobile;
-
-	//姓
-	private String surname;
-
-	//名
-	private String givenNames;
-
-	//身份证
-	private String passport;
-
-	//出生日期
-	private Date birthday;
-
-	//地址
-	private String address;
-
-    /**
      * 状态  0：禁用   1：正常
      */
     private Integer status;
-
-	/**
-	 * 头像
-	 */
-	private String headPortrait;
-
 
     /**
      * 创建者ID
@@ -82,6 +51,10 @@ public class SysUserEntity implements Serializable{
 	 */
 	private Long departmentId;
 
+	/**
+	 * 描述
+	 */
+	private String description;
 
 	/**
 	 * 部门信息
@@ -93,6 +66,4 @@ public class SysUserEntity implements Serializable{
 	 * 角色信息
 	 * */
 	private List<SysRoleEntity> roles;
-
-	private String remark;
 }

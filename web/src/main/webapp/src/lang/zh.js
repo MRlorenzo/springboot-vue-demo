@@ -6,6 +6,8 @@ export default {
     permission: '权限测试页',
     rolePermission: '角色权限',
     pagePermission: '页面权限',
+    department: '部门管理',
+    users: '用户管理',
     directivePermission: '指令权限',
     icons: '图标',
     components: '组件',
@@ -93,7 +95,9 @@ export default {
     tips: '在某些情况下，不适合使用 v-permission。例如：Element-UI 的 el-tab 或 el-table-column 以及其它动态渲染 dom 的场景。你只能通过手动设置 v-if 来实现。',
     delete: '删除',
     confirm: '确定',
-    cancel: '取消'
+    cancel: '取消',
+    addDepartment: '新增部门',
+    editDepartment: '编辑部门'
   },
   guide: {
     description: '引导页对于一些第一次进入项目的人很有用，你可以简单介绍下项目的功能。本 Demo 是基于',

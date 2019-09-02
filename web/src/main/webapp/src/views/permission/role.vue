@@ -70,7 +70,14 @@
 
 
         <el-form-item label="Menus">
-          <el-tree ref="tree" :check-strictly="checkStrictly" :data="routesData" :props="defaultProps" show-checkbox node-key="id" class="permission-tree" />
+          <el-tree ref="tree"
+                   :check-strictly="checkStrictly"
+                   :data="routesData"
+                   :props="defaultProps"
+                   show-checkbox
+                   node-key="id"
+                   :check-on-click-node="true"
+                   class="permission-tree" />
         </el-form-item>
       </el-form>
       <div style="text-align:right;">
@@ -87,9 +94,10 @@
 
 <script>
 import path from 'path'
-import { deepClone, checkOrParse2Json } from '@/utils'
-import { getRoutes, getRoles, addRole, deleteRole, updateRole } from '@/api/role'
-import { getDepartments } from '@/api/remote-search'
+import { deepClone, checkOrParse2Json, referenceRouteId} from '@/utils'
+import { getRoutes, getRoles, addRole, deleteRole, updateRole } from '@/api/auth/role'
+import { getDepartments } from '@/api/pub/department'
+import { asyncRoutes } from '@/router'
 import i18n from '@/lang'
 
 const defaultRole = {
@@ -132,8 +140,11 @@ export default {
   methods: {
     async getRoutes() {
       const res = await getRoutes()
-      this.serviceRoutes = res.list
-      const routes = this.generateRoutes(res.list)
+      /*
+      * 映射后台传过来的路由id,本地已经定义的路由才显示
+      * */
+      let localRoutes = referenceRouteId(deepClone(asyncRoutes) , res.list )
+      const routes = this.generateRoutes(localRoutes)
       this.routes = this.i18n(routes)
     },
     async getRoles() {
@@ -167,6 +178,9 @@ export default {
           route = onlyOneShowingChild
         }
 
+        /**
+         * 主要是防止Meta字段被人不小心定义成了string类型，因为数据库里面存的就是json string
+         */
         let meta = checkOrParse2Json(route.meta)
 
         const data = {
@@ -223,7 +237,7 @@ export default {
         type: 'warning'
       })
         .then(async() => {
-          await deleteRole(row.departmentId)
+          await deleteRole(row.id)
           this.rolesList.splice($index, 1)
           this.$message({
             type: 'success',
@@ -252,12 +266,12 @@ export default {
       const isEdit = this.dialogType === 'edit'
 
       const checkedKeys = this.$refs.tree.getCheckedKeys()
-      this.role.routes = this.generateTree(deepClone(this.serviceRoutes), checkedKeys)
+      this.role.routes = this.generateTree(deepClone(this.routes), checkedKeys)
 
       if (isEdit) {
-        await updateRole(this.role.key, this.role)
+        await updateRole(this.role)
         for (let index = 0; index < this.rolesList.length; index++) {
-          if (this.rolesList[index].key === this.role.key) {
+          if (this.rolesList[index].name === this.role.name) {
             this.rolesList.splice(index, 1, Object.assign({}, this.role))
             break
           }

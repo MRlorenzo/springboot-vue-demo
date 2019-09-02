@@ -5,6 +5,8 @@ export default {
     guide: 'Guide',
     permission: 'Permission',
     pagePermission: 'Page Permission',
+    department: 'Department',
+    users: '用户管理',
     rolePermission: 'Role Permission',
     directivePermission: 'Directive Permission',
     icons: 'Icons',
@@ -93,7 +95,9 @@ export default {
     tips: 'In some cases, using v-permission will have no effect. For example: Element-UI  el-tab or el-table-column and other scenes that dynamically render dom. You can only do this with v-if.',
     delete: 'Delete',
     confirm: 'Confirm',
-    cancel: 'Cancel'
+    cancel: 'Cancel',
+    addDepartment: 'New Department',
+    editDepartment: 'Edit Department'
   },
   guide: {
     description: 'The guide page is useful for some people who entered the project for the first time. You can briefly introduce the features of the project. Demo is based on ',

@@ -27,26 +27,17 @@
 		<result property="username" column="username"/>
 		<result property="password" column="password"/>
 		<result property="freePwd" column="free_pwd"/>
-		<result property="mobile" column="mobile"/>
-		<result property="surname" column="surname"/>
-		<result property="givenNames" column="given_names"/>
-		<result property="passport" column="passport"/>
-		<result property="birthday" column="birthday"/>
-		<result property="address" column="address"/>
 		<result property="status" column="status"/>
 		<result property="createUserId" column="create_user_id"/>
 		<result property="createTime" column="create_time"/>
-		<result property="headPortrait" column="head_portrait"/>
 		<result property="departmentId" column="department_id"/>
-		<result property="remark" column="remark"/>
+		<result property="description" column="description"/>
 	</resultMap>
 
 	<resultMap id="allInfo" type="org.spmul.entity.shiro.SysUserEntity" extends="sysUserMap">
 		<association property="departmentInfo" column="department_id" select="org.spmul.dao.shiro.DepartmentDao.queryObject"/>
 		<collection property="roles" column="user_id" select="org.spmul.dao.shiro.SysRoleDao.queryBatchByUserId"/>
 	</resultMap>
-
-
 
 
 	<sql id="queryObjectSql">
@@ -65,24 +56,6 @@
 			<if test="username != null and username.trim() != ''">
 				and `username` like concat('%',#{username},'%')
 			</if>
-			<if test="mobile != null and mobile.trim() != ''">
-				and `mobile` like concat('%',#{mobile},'%')
-			</if>
-			<if test="email != null and email.trim() !=''">
-				and `email` like concat('%',#{email},'%')
-			</if>
-			<if test="surName != null and surName.trim() != '' ">
-				and `surname` like concat('%',#{surName},'%')
-			</if>
-			<if test="givenNames != null and givenNames.trim() != '' ">
-				and `given_names` like concat('%',#{givenNames},'%')
-			</if>
-			<if test="address != null and address.trim()!= '' ">
-				and `address` like concat('%',#{address},'%')
-			</if>
-			<if test="roleId != null and roleId.trim() !='' ">
-				and `user_id` in (select user_id from sys_user_role where role_id=#{roleId})
-			</if>
 			<if test="startTime != null and startTime.toString() != ''">
 				and create_time &gt; #{startTime}
 			</if>
@@ -94,23 +67,6 @@
 			</if>
 			<if test="departmentId != null ">
 				and `department_id` = #{departmentId}
-			</if>
-			<if test="remark != null and remark != ''">
-				and `remark` = #{remark}
-			</if>
-			<if test="roleFiltering != null">
-				and `user_id` in (
-					SELECT DISTINCT
-					user_id
-					FROM
-					sys_role a,
-					sys_role b,
-					sys_user_role c
-					WHERE
-					a.role_id =  #{roleFiltering}
-					AND b.sort > a.sort
-					AND b.role_id = c.role_id
-				)
 			</if>
 		</where>
 	</sql>
@@ -164,20 +120,11 @@
 			`username`,
 			`password`,
 			`free_pwd`,
-			`email`,
-			`mobile`,
-			`surname`,
-			`given_names`,
-			`passport`,
-			`birthday`,
-			`address`,
 			`status`,
 			`create_user_id`,
 			`create_time`,
-			`head_portrait`,
 			`department_id`,
-			`hiredate`,
-			`remark`
+			`description`
 		)
 		values
 		(
@@ -185,75 +132,13 @@
 			#{username},
 			#{password},
 			#{freePwd},
-			#{email},
-			#{mobile},
-			#{surname},
-			#{givenNames},
-			#{passport},
-			#{birthday},
-			#{address},
 			#{status},
 			#{createUserId},
 			#{createTime},
-			#{headPortrait},
 			#{departmentId},
-			#{hiredate},
-			#{remark}
+			#{description}
 		)
 	</insert>
-
-
-
-	<insert id="batchSave" parameterType="org.spmul.entity.shiro.SysUserEntity" keyProperty="userId"  useGeneratedKeys="true" >
-		<foreach collection="list" item="user" index="index"  separator=";">/*放这里的话就没有全部生成userId，只生成了一条*/
-			insert into sys_user
-			(
-			`user_id`,
-			`username`,
-			`password`,
-			`free_pwd`,
-			`email`,
-			`mobile`,
-			`surname`,
-			`given_names`,
-			`passport`,
-			`birthday`,
-			`address`,
-			`status`,
-			`create_user_id`,
-			`create_time`,
-			`head_portrait`,
-			`department_id`,
-			`hiredate`,
-			`remark`
-			)
-		<!--<foreach collection="list" item="user" index="index"  separator=","> 放这里就会报错-->
-			values
-			(
-			#{user.userId},
-			#{user.username},
-			#{user.password},
-			#{user.freePwd},
-			#{user.email},
-			#{user.mobile},
-			#{user.surname},
-			#{user.givenNames},
-			#{user.passport},
-			#{user.birthday},
-			#{user.address},
-			#{user.status},
-			#{user.createUserId},
-			#{user.createTime},
-			#{user.headPortrait},
-			#{user.departmentId},
-			#{user.hiredate},
-			#{user.remark}
-			)
-		</foreach>
-
-	</insert>
-
-
 
 	<update id="update" parameterType="org.spmul.entity.shiro.SysUserEntity">
 		update sys_user
@@ -261,18 +146,9 @@
 			<if test="username != null">`username` = #{username}, </if>
 			<if test="password != null">`password` = #{password}, </if>
 			<if test="freePwd != null">`free_pwd` = #{freePwd},</if>
-			<if test="email != null">`email` = #{email}, </if>
-			<if test="mobile != null">`mobile` = #{mobile}, </if>
-			<if test="surname != null">`surname` = #{surname}, </if>
-			<if test="givenNames != null">`given_names` = #{givenNames}, </if>
-			<if test="passport != null">`passport` = #{passport}, </if>
-			<if test="birthday != null">`birthday` = #{birthday}, </if>
-			<if test="address != null">`address` = #{address}, </if>
 			<if test="status != null">`status` = #{status}, </if>
-			<if test="headPortrait">`head_portrait` = #{headPortrait},</if>
 			<if test="departmentId!=null">`department_id` = #{departmentId},</if>
-			<if test="hiredate!=null">`hiredate` = #{hiredate},</if>
-			<if test="remark!=null">`remark` = #{remark}</if>
+			<if test="description != null">`description` = #{description}</if>
 		</set>
 		where user_id = #{userId}
 		<if test="createUserId != null">
@@ -307,103 +183,4 @@
 		</foreach>
 	</delete>
 
-	<select id="queryUserIsDealer" resultType="int">
-		SELECT
-			count(*)
-		FROM
-			sys_config
-		WHERE
-			`key` = 'DEALER_ROLE_ID'
-		AND `value` = (
-			SELECT
-				b.role_id
-			FROM
-				sys_user a
-			INNER JOIN sys_user_role b ON a.user_id = b.user_id
-			WHERE
-				a.user_id = #{userId}
-		)
-	</select>
-
-
-	<select id="queryUserCountByUsername" resultType="int">
-		select count(1) from sys_user where username=#{username}
-	</select>
-
-
-	<select id="queryUserLikeUsername" resultType="java.util.Map">
-		SELECT
-			DISTINCT
-			u.user_id,
-			u.username,
-			u.surname,
-			u.given_names,
-			u.hiredate,
-			ur.role_id,
-			b.role_name,
-			b.en_name,
-			u.hiredate,
-			u.head_portrait
-		FROM
-			sys_user u
-		INNER JOIN sys_user_role ur ON u.user_id = ur.user_id
-		INNER JOIN sys_role b ON ur.role_id = b.role_id
-		where u.username like concat(#{username},'%')
-		<if test="departmentId != null">
-			AND u.department_id = #{departmentId}
-		</if>
-		<if test="roleId != null">
-			AND ur.role_id IN (
-				SELECT b.role_id from sys_role a, sys_role b
-				WHERE a.role_id = #{roleId} and a.sort &lt; b.sort
-			)
-		</if>
-		limit 10
-	</select>
-
-
-	<select id="queryUserRoleInfoByUserId" resultType="java.util.Map">
-		SELECT
-		DISTINCT
-		u.user_id,
-		u.username,
-		u.surname,
-		u.given_names,
-		ur.role_id,
-		b.role_name,
-		b.en_name,
-		u.hiredate,
-		u.head_portrait
-		FROM
-		sys_user u
-		INNER JOIN sys_user_role ur ON u.user_id = ur.user_id
-		INNER JOIN sys_role b ON ur.role_id = b.role_id
-		where u.user_id = #{userId}
-	</select>
-
-
-
-	<select id="queryDepartmentIdByString" resultType="java.lang.Long">
-		select department_id from tb_department where name=#{value} or en_name=#{value} or department_code=#{value}
-	</select>
-
-	<select id="queryUserByUsername" resultType="java.util.Map">
-		SELECT
-			DISTINCT
-			u.user_id,
-			u.username,
-			u.surname,
-			u.given_names,
-			ur.role_id,
-			b.role_name,
-			b.en_name,
-			u.hiredate,
-			u.head_portrait
-		FROM
-			sys_user u
-		INNER JOIN sys_user_role ur ON u.user_id = ur.user_id
-		INNER JOIN sys_role b ON ur.role_id = b.role_id
-		where u.username = #{username}
-		limit 1
-	</select>
 </mapper>

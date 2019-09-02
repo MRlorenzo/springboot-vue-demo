@@ -22,7 +22,7 @@ export function addRole(data) {
   })
 }
 
-export function updateRole(id, data) {
+export function updateRole(data) {
   return request({
     url: `/permission/role/update`,
     method: 'put',

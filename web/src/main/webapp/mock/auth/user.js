@@ -1,4 +1,6 @@
 import { asyncRoutes } from './role/routes.js'
+import serverUsers from './server_users'
+
 const tokens = {
   admin: {
     token: 'admin-token'
@@ -7,7 +9,6 @@ const tokens = {
     token: 'editor-token'
   }
 }
-
 
 const users = {
   'admin-token': {
@@ -72,6 +73,31 @@ export default [
         code: 0,
         entity:{
           ...info
+        }
+      }
+    }
+  },
+
+  {
+    url: '/user/page',
+    type: 'get',
+    response: config => {
+      let {page , limit} = config.query
+      page = page || 1
+      limit = limit || 10
+
+      let offset = (page - 1) * limit
+      let end = offset + limit
+      let totalPage = Math.ceil(serverUsers.length / limit)
+      let list = serverUsers.filter((item , index) => index >= offset && index < end)
+      return {
+        code: 0,
+        page: {
+          currPage: page,
+          list,
+          pageSize: limit,
+          totalCount: serverUsers.length,
+          totalPage
         }
       }
     }

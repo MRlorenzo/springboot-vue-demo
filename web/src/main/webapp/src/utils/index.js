@@ -359,3 +359,38 @@ export function checkOrParse2Json( data ) {
   }
   return data;
 }
+
+/**
+ * 取相同的路由ID并设置到目标中
+ * @param targets  需要设置ID的目标
+ * @param sources  ID的源
+ */
+export function referenceRouteId( targets = [] , sources = []){
+  let list = []
+
+  targets.forEach(target => {
+    let source = equalRouteByPath(target , sources)
+    if ( source ){
+      target.id = source.id
+
+      if (target.children && target.children.length){
+        // 防止调用者传递过来的参数为 null , 因为null值会被判定是有效的值
+        target.children = referenceRouteId(target.children || [] , source.children || [])
+      }
+
+      list.push(target)
+    }
+  })
+  return list
+}
+
+function equalRouteByPath( route , sourceRoutes ){
+  let target = null
+  for(const r of sourceRoutes){
+    if(r.path === route.path){
+      target = r
+      break
+    }
+  }
+  return target
+}

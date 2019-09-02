@@ -13,12 +13,6 @@
           <el-radio label="en" border>
             English
           </el-radio>
-          <el-radio label="es" border>
-            Español
-          </el-radio>
-          <el-radio label="ja" border>
-            日本語
-          </el-radio>
         </el-radio-group>
         <el-tag style="margin-top:15px;display:block;" type="info">
           {{ $t('i18nView.note') }}

@@ -113,6 +113,24 @@ export const asyncRoutes = [
           title: 'rolePermission',
           roles: ['admin']
         }
+      },
+      {
+        id: 49,
+        path: 'department',
+        component: 'views/permission/department',
+        name:'Department',
+        meta: {
+          title: 'department'
+        }
+      },
+      {
+        id: 50,
+        path: 'users',
+        component: 'views/permission/users',
+        name: 'Users',
+        meta: {
+          title: 'users'
+        }
       }
     ]
   },

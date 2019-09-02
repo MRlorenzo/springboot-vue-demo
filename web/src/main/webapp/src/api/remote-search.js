@@ -15,10 +15,3 @@ export function transactionList(query) {
     params: query
   })
 }
-
-export function getDepartments() {
-  return request({
-    url: '/department/departments',
-    method: 'get'
-  })
-}

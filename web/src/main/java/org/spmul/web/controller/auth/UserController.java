@@ -4,9 +4,13 @@ import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.UnknownAccountException;
 import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.subject.Subject;
+import org.spmul.common.base.BaseController;
+import org.spmul.common.base.BaseDao;
 import org.spmul.common.util.R;
 import org.spmul.entity.dto.UserInfo;
+import org.spmul.entity.shiro.SysUserEntity;
 import org.spmul.service.shiro.RouteService;
+import org.spmul.service.shiro.SysUserService;
 import org.spmul.shiro.utils.ShiroUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -16,10 +20,28 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("user")
-public class UserController {
+public class UserController extends BaseController<SysUserEntity>{
 
     @Autowired
     private RouteService routeService;
+
+    @Autowired
+    private SysUserService sysUserService;
+
+    @Override
+    protected BaseDao<SysUserEntity> getBaseService() {
+        return sysUserService;
+    }
+
+    @GetMapping("/page")
+    public R page(@RequestParam Map<String, Object> params){
+        return super.list(params);
+    }
+
+    @GetMapping("/all")
+    public R page(){
+        return R.ok().put("list" , getBaseService().queryList(null));
+    }
 
     @PostMapping("/login")
     public R login(@RequestBody Map<String , String> params){
@@ -72,5 +94,6 @@ public class UserController {
         userInfo.setRoutes(routeService.queryByRoleId(roleId));
         return R.ok().put("entity" , userInfo);
     }
+
 
 }

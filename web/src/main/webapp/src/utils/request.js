@@ -3,7 +3,7 @@ import { MessageBox, Message } from 'element-ui'
 import store from '@/store'
 import { getToken } from '@/utils/auth'
 
-const blacklist = [ 403 , 405 , 500]
+const blacklist = [ 403 , 405 , 500 , 400]
 
 // create an axios instance
 const service = axios.create({
