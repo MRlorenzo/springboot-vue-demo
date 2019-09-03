@@ -66,3 +66,29 @@ export function toThousandFilter(num) {
 export function uppercaseFirst(string) {
   return string.charAt(0).toUpperCase() + string.slice(1)
 }
+
+/**
+ * 將部門字段解析成可識別的值
+ * @param department
+ * @returns {*}
+ */
+export function departmentText( department ){
+  if( department ){
+    return department.departmentCode
+  }else{
+    return department
+  }
+}
+
+/**
+ * 將角色字段解析成可識別的值
+ * @param roles
+ * @returns {*}
+ */
+export function rolesText( roles ){
+  if (Array.isArray(roles)){
+    return Object.values(roles).map(role=>role.name).join(',')
+  } else {
+    return roles
+  }
+}

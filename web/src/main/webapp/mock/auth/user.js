@@ -1,31 +1,7 @@
 import { asyncRoutes } from './role/routes.js'
 import serverUsers from './server_users'
 
-const tokens = {
-  admin: {
-    token: 'admin-token'
-  },
-  editor: {
-    token: 'editor-token'
-  }
-}
 
-const users = {
-  'admin-token': {
-    roles: ['admin'],
-    introduction: 'I am a super administrator',
-    avatar: 'https://wpimg.wallstcn.com/f778738c-e4f8-4870-b634-56703b4acafe.gif',
-    name: 'Super Admin',
-    routes: asyncRoutes
-  },
-  'editor-token': {
-    roles: ['editor'],
-    introduction: 'I am an editor',
-    avatar: 'https://wpimg.wallstcn.com/f778738c-e4f8-4870-b634-56703b4acafe.gif',
-    name: 'Normal Editor',
-    routes: []
-  }
-}
 
 export default [
   // user login
@@ -33,20 +9,10 @@ export default [
     url: '/user/login',
     type: 'post',
     response: config => {
-      const { username } = config.body
-      const { token } = tokens[username]
-
-      // mock error
-      if (!token) {
-        return {
-          code: 500,
-          msg: 'Account and password are incorrect.'
-        }
-      }
 
       return {
         code: 0,
-        token: token
+        token: 'admin-token'
       }
     }
   },
@@ -56,10 +22,8 @@ export default [
     url: '/user/info',
     type: 'get',
     response: config => {
-      // const { token } = config.query
       // 假设我们登陆的账号是admin
-      const token = 'admin-token'
-      const info = users[token]
+      const [info] = serverUsers
 
       // mock error
       if (!info) {
@@ -68,6 +32,9 @@ export default [
           msg: 'Login failed, unable to get user details.'
         }
       }
+
+      info.routes = asyncRoutes
+      info.roles = ['admin']
 
       return {
         code: 0,
@@ -99,6 +66,39 @@ export default [
           totalCount: serverUsers.length,
           totalPage
         }
+      }
+    }
+  },
+  // update user
+  {
+    url: '/user/update',
+    type: 'post',
+    response: _=>{
+      return {
+        code: 0,
+        data: 'success'
+      }
+    }
+  },
+  // add user
+  {
+    url: '/user/add',
+    type: 'post',
+    response: _=>{
+      return {
+        code: 0,
+        data: 'success'
+      }
+    }
+  },
+
+  {
+    url: '/user/del/[A-Za-z0-9]',
+    type: 'get',
+    response: _=>{
+      return {
+        code: 0,
+        data: 'success'
       }
     }
   },

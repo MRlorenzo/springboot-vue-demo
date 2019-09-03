@@ -80,7 +80,7 @@ public class SysRoleEntity implements Serializable {
 	/**
 	 * 部门实体
 	 */
-	private DepartmentEntity departmentInfo;
+	private DepartmentEntity department;
 
 	/**
 	 * 排序

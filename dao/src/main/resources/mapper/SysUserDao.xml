@@ -35,7 +35,7 @@
 	</resultMap>
 
 	<resultMap id="allInfo" type="org.spmul.entity.shiro.SysUserEntity" extends="sysUserMap">
-		<association property="departmentInfo" column="department_id" select="org.spmul.dao.shiro.DepartmentDao.queryObject"/>
+		<association property="department" column="department_id" select="org.spmul.dao.shiro.DepartmentDao.queryObject"/>
 		<collection property="roles" column="user_id" select="org.spmul.dao.shiro.SysRoleDao.queryBatchByUserId"/>
 	</resultMap>
 

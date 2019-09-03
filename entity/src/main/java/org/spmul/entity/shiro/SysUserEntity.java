@@ -60,7 +60,12 @@ public class SysUserEntity implements Serializable{
 	 * 部门信息
 	 *
 	 */
-	private DepartmentEntity departmentInfo;
+	private DepartmentEntity department;
+
+	/**
+	* 角色ids
+	* */
+	private List<Long> roleIds;
 
 	/**
 	 * 角色信息

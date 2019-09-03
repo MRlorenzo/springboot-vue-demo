@@ -36,7 +36,7 @@
 	</resultMap>
 
 	<resultMap id="allInfo" type="org.spmul.entity.shiro.SysRoleEntity" extends="sysRoleMap">
-		<association property="departmentInfo" column="department_id" select="org.spmul.dao.shiro.DepartmentDao.queryObject"/>
+		<association property="department" column="department_id" select="org.spmul.dao.shiro.DepartmentDao.queryObject"/>
 		<collection property="routes" column="id" select="org.spmul.dao.shiro.RouteDao.queryByRoleId"/>
 	</resultMap>
 

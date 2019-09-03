@@ -7,15 +7,15 @@ const routes = deepClone([ ...asyncRoutes])
 const db_roles = [
   {
     "id": 1,
-    "name": "管理员",
+    "name": "admin",
     "description": "管理员",
     "createUserId": 1,
     "createTime": "2017-04-03T14:50:06.000+0000",
     "isShift": 0,
     "isDel": 0,
     "departmentId": 1,
-    "departmentInfo": {
-      "departmentId": 4,
+    "department": {
+      "departmentId": 1,
       "name": "董事长",
       "enName": "President",
       "departmentCode": "President",

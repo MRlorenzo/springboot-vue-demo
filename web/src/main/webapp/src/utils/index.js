@@ -372,14 +372,15 @@ export function referenceRouteId( targets = [] , sources = []){
     let source = equalRouteByPath(target , sources)
     if ( source ){
       target.id = source.id
-
-      if (target.children && target.children.length){
-        // 防止调用者传递过来的参数为 null , 因为null值会被判定是有效的值
-        target.children = referenceRouteId(target.children || [] , source.children || [])
-      }
-
-      list.push(target)
+    } else {
+      // 没有ID的值，设置为禁用。
+      target.disabled = true
     }
+    if (target.children && target.children.length){
+      // 防止调用者传递过来的参数为 null , 因为null值会被判定是有效的值
+      target.children = referenceRouteId(target.children || [] ,source && source.children || [])
+    }
+    list.push(target)
   })
   return list
 }

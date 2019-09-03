@@ -5,27 +5,25 @@
     </el-button>
 
     <el-table :data="rolesList" style="width: 100%;margin-top:30px;" border>
-      <!-- 已弃用 key 字段-->
-      <!--<el-table-column align="center" label="Role Key" width="220">-->
-        <!--<template slot-scope="scope">-->
-          <!--{{ scope.row.key }}-->
-        <!--</template>-->
-      <!--</el-table-column>-->
+
       <el-table-column align="center" label="Department" width="220">
         <template slot-scope="scope">
-          {{ scope.row.departmentInfo.departmentCode }}
+          {{ scope.row.department | departmentText }}
         </template>
       </el-table-column>
+
       <el-table-column align="center" label="Role Name" width="220">
         <template slot-scope="scope">
           {{ scope.row.name }}
         </template>
       </el-table-column>
+
       <el-table-column align="header-center" label="Description">
         <template slot-scope="scope">
           {{ scope.row.description }}
         </template>
       </el-table-column>
+
       <el-table-column align="center" label="Operations">
         <template slot-scope="scope">
           <el-button type="primary" size="small" @click="handleEdit(scope)">
@@ -103,7 +101,7 @@ import i18n from '@/lang'
 const defaultRole = {
   name: '',
   description: '',
-  departmentInfo: {
+  department: {
     departmentCode: ''
   },
   departmentId: null,
@@ -136,6 +134,7 @@ export default {
     this.getRoutes()
     this.getRoles()
     this.getDepartments()
+    window.roleVm = this
   },
   methods: {
     async getRoutes() {
@@ -175,7 +174,10 @@ export default {
 
         const onlyOneShowingChild = this.onlyOneShowingChild(route.children, route)
         if (route.children && onlyOneShowingChild && !route.alwaysShow) {
+          const pid = route.id
           route = onlyOneShowingChild
+          // 提交权限修改时可不能落下父ID，
+          route.pid = pid
         }
 
         /**
@@ -186,7 +188,9 @@ export default {
         const data = {
           path: route.path,
           title: meta && meta.title,
-          id: route.id
+          id: route.id,
+          pid: route.pid,
+          disabled: route.disabled
         }
 
         // recursive child routes
@@ -258,6 +262,11 @@ export default {
 
         if (checkedKeys.includes(route.id) || (route.children && route.children.length >= 1)) {
           res.push(route)
+
+          if (route.pid){
+            let tmp = deepClone(route)
+            res.push(Object.assign(tmp , { id : route.pid}))
+          }
         }
       }
       return res

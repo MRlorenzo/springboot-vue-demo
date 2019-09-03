@@ -20,12 +20,41 @@
         </template>
       </el-table-column>
 
+      <!-- 部门 -->
+      <el-table-column align="header-center" label="Department">
+        <template slot-scope="scope">
+          {{ scope.row.department | departmentText }}
+        </template>
+      </el-table-column>
+
+      <!-- 角色列表 -->
+      <el-table-column align="header-center" label="Roles">
+        <template slot-scope="scope">
+          {{ scope.row.roles | rolesText}}
+        </template>
+      </el-table-column>
+
       <!-- 描述 -->
       <el-table-column align="header-center" label="Description">
         <template slot-scope="scope">
-          {{ scope.row.description }}
+          {{ scope.row.description  }}
         </template>
       </el-table-column>
+
+      <!--状态: 0 禁用 1 正常-->
+      <el-table-column align="header-center" label="Status">
+        <template slot-scope="scope">
+          {{ scope.row.status | statusText}}
+        </template>
+      </el-table-column>
+
+      <!--创建时间-->
+      <el-table-column align="header-center" label="CreateTime">
+        <template slot-scope="scope">
+          {{ scope.row.createTime }}
+        </template>
+      </el-table-column>
+
       <!--操作-->
       <el-table-column align="center" label="Operations">
         <template slot-scope="scope">
@@ -60,6 +89,43 @@
           <el-input v-model="user.username" placeholder="User Name" />
         </el-form-item>
 
+        <!--密码-->
+        <el-form-item label="Pass">
+          <el-input type="password" v-model="user.password" placeholder="Password" />
+        </el-form-item>
+
+        <!--免密密码-->
+        <el-form-item label="Free">
+          <el-input type="password" v-model="user.freePwd" placeholder="Free Password" />
+        </el-form-item>
+
+        <!--部门-->
+        <el-form-item label="Dep">
+          <el-select v-model="user.departmentId" placeholder="Department">
+            <el-option
+              v-for="dep in departmentList"
+              :key="dep.departmentId"
+              :label="dep.departmentCode"
+              :value="dep.departmentId">
+            </el-option>
+          </el-select>
+        </el-form-item>
+
+        <!--角色们-->
+        <el-form-item label="Roles">
+          <el-select
+            v-model="user.roleIds"
+            :multiple="true"
+            placeholder="Roles">
+            <el-option
+              v-for="role in rolesList"
+              :key="role.id"
+              :label="role.name"
+              :value="role.id">
+            </el-option>
+          </el-select>
+        </el-form-item>
+
         <!-- 描述-->
         <el-form-item label="Desc">
           <el-input
@@ -88,14 +154,18 @@
 <script>
   import { deepClone } from '@/utils'
   import { getDataPage , delUser, updateUser , addUser} from "@/api/auth/user";
+  import { getRoles } from '@/api/auth/role'
+  import { getDepartments } from '@/api/pub/department'
+
 
   const defaultUser = {
     username: '',
     password: '',
     freePwd: '',
     status: 1,
+    description: '',
     departmentId: 1,
-    roles: []
+    roleIds: []
   }
 
   export default {
@@ -108,7 +178,17 @@
         page: { list: []},
         dialogVisible: false,
         dialogType: 'new',
-        queryText: ''
+        queryText: '',
+        departmentList: [],
+        rolesList: []
+      }
+    },
+    filters: {
+      statusText( status ){
+        return {
+          '0': '禁用',
+          '1': '正常'
+        }[status]
       }
     },
     computed: {
@@ -126,21 +206,31 @@
     },
     created(){
       this.getDataPage()
+      this.getRoles()
+      this.getDepartments()
     },
     methods: {
       async getDataPage(){
         const res = await getDataPage({page: this.page.currPage , limit: this.pageLimit})
         this.page = res.page
       },
+      async getRoles() {
+        const res = await getRoles()
+        this.rolesList = res.list
+      },
+      async getDepartments(){
+        const res = await getDepartments()
+        this.departmentList = res.list
+      },
       handleAdd(){
-        this.department = Object.assign({}, defaultUser)
+        this.user = Object.assign({}, defaultUser)
         this.dialogType = 'new'
         this.dialogVisible = true
       },
       handleEdit( scope ){
         this.dialogType = 'edit'
         this.dialogVisible = true
-        this.department = deepClone(scope.row)
+        this.user = deepClone(scope.row)
       },
       handleDelete({ $index, row }){
         this.$confirm('Confirm to remove the User?', 'Warning', {

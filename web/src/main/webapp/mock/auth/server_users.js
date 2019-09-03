@@ -8,9 +8,20 @@ export default [
     "createUserId": null,
     "createTime": "2019-09-01T01:15:16.000+0000",
     "departmentId": 0,
-    "departmentInfo": null,
+    "department": {
+      "departmentId": 1,
+      "name": "董事长",
+      "enName": "President",
+      "departmentCode": "President",
+      "sort": 1
+    },
     "description": null,
-    "roles": null
+    "roles": [
+      {
+        id: 1,
+        name: 'admin'
+      }
+    ]
   },
   {
     "userId": 668,
@@ -21,9 +32,20 @@ export default [
     "createUserId": null,
     "createTime": "2019-09-01T01:15:16.000+0000",
     "departmentId": 0,
-    "departmentInfo": null,
+    "department": {
+      "departmentId": 2,
+      "name": "人事",
+      "enName": "HR",
+      "departmentCode": "HR",
+      "sort": 2
+    },
     "description": null,
-    "roles": null
+    "roles": [
+      {
+        id: 2,
+        name: 'hr'
+      }
+    ]
   },
   {
     "userId": 667,
@@ -34,9 +56,20 @@ export default [
     "createUserId": null,
     "createTime": "2019-09-01T01:15:16.000+0000",
     "departmentId": 0,
-    "departmentInfo": null,
+    "department": {
+      "departmentId": 2,
+      "name": "人事",
+      "enName": "HR",
+      "departmentCode": "HR",
+      "sort": 2
+    },
     "description": null,
-    "roles": null
+    "roles": [
+      {
+        id: 2,
+        name: 'hr'
+      }
+    ]
   },
   {
     "userId": 666,
@@ -47,9 +80,20 @@ export default [
     "createUserId": null,
     "createTime": "2019-09-01T01:15:16.000+0000",
     "departmentId": 0,
-    "departmentInfo": null,
+    "department": {
+      "departmentId": 2,
+      "name": "人事",
+      "enName": "HR",
+      "departmentCode": "HR",
+      "sort": 2
+    },
     "description": null,
-    "roles": null
+    "roles": [
+      {
+        id: 2,
+        name: 'hr'
+      }
+    ]
   },
   {
     "userId": 665,
@@ -60,9 +104,20 @@ export default [
     "createUserId": null,
     "createTime": "2019-09-01T01:15:16.000+0000",
     "departmentId": 0,
-    "departmentInfo": null,
+    "department": {
+      "departmentId": 2,
+      "name": "人事",
+      "enName": "HR",
+      "departmentCode": "HR",
+      "sort": 2
+    },
     "description": null,
-    "roles": null
+    "roles": [
+      {
+        id: 2,
+        name: 'hr'
+      }
+    ]
   },
   {
     "userId": 664,
@@ -73,9 +128,20 @@ export default [
     "createUserId": null,
     "createTime": "2019-09-01T01:15:16.000+0000",
     "departmentId": 0,
-    "departmentInfo": null,
+    "department": {
+      "departmentId": 2,
+      "name": "人事",
+      "enName": "HR",
+      "departmentCode": "HR",
+      "sort": 2
+    },
     "description": null,
-    "roles": null
+    "roles": [
+      {
+        id: 2,
+        name: 'hr'
+      }
+    ]
   },
   {
     "userId": 663,
@@ -86,9 +152,20 @@ export default [
     "createUserId": null,
     "createTime": "2019-09-01T01:15:16.000+0000",
     "departmentId": 0,
-    "departmentInfo": null,
+    "department": {
+      "departmentId": 2,
+      "name": "人事",
+      "enName": "HR",
+      "departmentCode": "HR",
+      "sort": 2
+    },
     "description": null,
-    "roles": null
+    "roles": [
+      {
+        id: 2,
+        name: 'hr'
+      }
+    ]
   },
   {
     "userId": 662,
@@ -99,9 +176,14 @@ export default [
     "createUserId": null,
     "createTime": "2019-09-01T01:15:16.000+0000",
     "departmentId": 0,
-    "departmentInfo": null,
+    "department": null,
     "description": null,
-    "roles": null
+    "roles": [
+      {
+        id: 2,
+        name: 'hr'
+      }
+    ]
   },
   {
     "userId": 661,
@@ -112,9 +194,20 @@ export default [
     "createUserId": null,
     "createTime": "2019-09-01T01:15:16.000+0000",
     "departmentId": 0,
-    "departmentInfo": null,
+    "department": {
+      "departmentId": 2,
+      "name": "人事",
+      "enName": "HR",
+      "departmentCode": "HR",
+      "sort": 2
+    },
     "description": null,
-    "roles": null
+    "roles": [
+      {
+        id: 2,
+        name: 'hr'
+      }
+    ]
   },
   {
     "userId": 660,
@@ -125,9 +218,20 @@ export default [
     "createUserId": null,
     "createTime": "2019-09-01T01:15:16.000+0000",
     "departmentId": 0,
-    "departmentInfo": null,
+    "department": {
+      "departmentId": 2,
+      "name": "人事",
+      "enName": "HR",
+      "departmentCode": "HR",
+      "sort": 2
+    },
     "description": null,
-    "roles": null
+    "roles": [
+      {
+        id: 2,
+        name: 'hr'
+      }
+    ]
   },
   {
     "userId": 659,
@@ -138,9 +242,20 @@ export default [
     "createUserId": null,
     "createTime": "2019-09-01T01:15:16.000+0000",
     "departmentId": 0,
-    "departmentInfo": null,
+    "department": {
+      "departmentId": 2,
+      "name": "人事",
+      "enName": "HR",
+      "departmentCode": "HR",
+      "sort": 2
+    },
     "description": null,
-    "roles": null
+    "roles": [
+      {
+        id: 2,
+        name: 'hr'
+      }
+    ]
   },
   {
     "userId": 658,
@@ -151,9 +266,20 @@ export default [
     "createUserId": null,
     "createTime": "2019-09-01T01:15:16.000+0000",
     "departmentId": 0,
-    "departmentInfo": null,
+    "department": {
+      "departmentId": 2,
+      "name": "人事",
+      "enName": "HR",
+      "departmentCode": "HR",
+      "sort": 2
+    },
     "description": null,
-    "roles": null
+    "roles": [
+      {
+        id: 2,
+        name: 'hr'
+      }
+    ]
   },
   {
     "userId": 657,
@@ -164,9 +290,20 @@ export default [
     "createUserId": null,
     "createTime": "2019-09-01T01:15:16.000+0000",
     "departmentId": 0,
-    "departmentInfo": null,
+    "department": {
+      "departmentId": 2,
+      "name": "人事",
+      "enName": "HR",
+      "departmentCode": "HR",
+      "sort": 2
+    },
     "description": null,
-    "roles": null
+    "roles": [
+      {
+        id: 2,
+        name: 'hr'
+      }
+    ]
   },
   {
     "userId": 656,
@@ -177,9 +314,20 @@ export default [
     "createUserId": null,
     "createTime": "2019-09-01T01:15:16.000+0000",
     "departmentId": 0,
-    "departmentInfo": null,
+    "department": {
+      "departmentId": 2,
+      "name": "人事",
+      "enName": "HR",
+      "departmentCode": "HR",
+      "sort": 2
+    },
     "description": null,
-    "roles": null
+    "roles": [
+      {
+        id: 2,
+        name: 'hr'
+      }
+    ]
   },
   {
     "userId": 655,
@@ -190,9 +338,20 @@ export default [
     "createUserId": null,
     "createTime": "2019-09-01T01:15:16.000+0000",
     "departmentId": 0,
-    "departmentInfo": null,
+    "department": {
+      "departmentId": 2,
+      "name": "人事",
+      "enName": "HR",
+      "departmentCode": "HR",
+      "sort": 2
+    },
     "description": null,
-    "roles": null
+    "roles": [
+      {
+        id: 2,
+        name: 'hr'
+      }
+    ]
   },
   {
     "userId": 654,
@@ -203,9 +362,20 @@ export default [
     "createUserId": null,
     "createTime": "2019-09-01T01:15:16.000+0000",
     "departmentId": 0,
-    "departmentInfo": null,
+    "department": {
+      "departmentId": 2,
+      "name": "人事",
+      "enName": "HR",
+      "departmentCode": "HR",
+      "sort": 2
+    },
     "description": null,
-    "roles": null
+    "roles": [
+      {
+        id: 2,
+        name: 'hr'
+      }
+    ]
   },
   {
     "userId": 1,
@@ -216,8 +386,19 @@ export default [
     "createUserId": null,
     "createTime": "2016-11-11T11:11:11.000+0000",
     "departmentId": 0,
-    "departmentInfo": null,
+    "department": {
+      "departmentId": 2,
+      "name": "人事",
+      "enName": "HR",
+      "departmentCode": "HR",
+      "sort": 2
+    },
     "description": null,
-    "roles": null
+    "roles": [
+      {
+        id: 2,
+        name: 'hr'
+      }
+    ]
   }
 ]
