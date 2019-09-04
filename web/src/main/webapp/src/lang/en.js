@@ -6,7 +6,8 @@ export default {
     permission: 'Permission',
     pagePermission: 'Page Permission',
     department: 'Department',
-    users: '用户管理',
+    users: 'Users',
+    menus: 'Menus',
     rolePermission: 'Role Permission',
     directivePermission: 'Directive Permission',
     icons: 'Icons',
@@ -97,7 +98,9 @@ export default {
     confirm: 'Confirm',
     cancel: 'Cancel',
     addDepartment: 'New Department',
-    editDepartment: 'Edit Department'
+    editDepartment: 'Edit Department',
+    editUser: '编辑用户',
+    addUser: '新增用户'
   },
   guide: {
     description: 'The guide page is useful for some people who entered the project for the first time. You can briefly introduce the features of the project. Demo is based on ',

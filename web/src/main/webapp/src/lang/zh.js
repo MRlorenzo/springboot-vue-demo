@@ -8,6 +8,7 @@ export default {
     pagePermission: '页面权限',
     department: '部门管理',
     users: '用户管理',
+    menus: '菜单管理',
     directivePermission: '指令权限',
     icons: '图标',
     components: '组件',
@@ -97,7 +98,11 @@ export default {
     confirm: '确定',
     cancel: '取消',
     addDepartment: '新增部门',
-    editDepartment: '编辑部门'
+    editDepartment: '编辑部门',
+    editUser: '编辑用户',
+    addUser: '新增用户',
+    addMenu: '新增菜单',
+    editMenu: '编辑菜单'
   },
   guide: {
     description: '引导页对于一些第一次进入项目的人很有用，你可以简单介绍下项目的功能。本 Demo 是基于',

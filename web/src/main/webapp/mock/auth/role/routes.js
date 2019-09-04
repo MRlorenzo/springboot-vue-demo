@@ -76,24 +76,24 @@ export const asyncRoutes = [
   {
     id: 1,
     path: '/permission',
-    component: 'layout/Layout',
-    redirect: '/permission/index',
-    alwaysShow: true,
-    meta: {
-      title: 'permission',
-      icon: 'lock',
-      roles: ['admin', 'editor']
-    },
+    // component: 'layout/Layout',
+    // redirect: '/permission/index',
+    // alwaysShow: true,
+    // meta: {
+    //   title: 'permission',
+    //   icon: 'lock',
+    //   roles: ['admin', 'editor']
+    // },
     children: [
       {
         id: 2,
         path: 'page',
-        component: 'views/permission/page',
-        name: 'PagePermission',
-        meta: {
-          title: 'pagePermission',
-          roles: ['admin']
-        }
+        // component: 'views/permission/page',
+        // name: 'PagePermission',
+        // meta: {
+        //   title: 'pagePermission',
+        //   roles: ['admin']
+        // }
       },
       {
         id: 3,
@@ -131,6 +131,10 @@ export const asyncRoutes = [
         meta: {
           title: 'users'
         }
+      },
+      {
+        id: 51,
+        path: 'menus'
       }
     ]
   },

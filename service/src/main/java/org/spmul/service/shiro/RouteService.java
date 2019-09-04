@@ -4,6 +4,7 @@ import org.spmul.common.base.BaseDao;
 import org.spmul.entity.shiro.RouteEntity;
 
 import java.util.List;
+import java.util.Map;
 
 public interface RouteService  extends BaseDao<RouteEntity> {
 
@@ -21,4 +22,9 @@ public interface RouteService  extends BaseDao<RouteEntity> {
      * 根据用户id查出所有的权限字符串
      * */
     List<String> queryPermissionsByUserId(Long userId);
+
+    /**
+     *  根据条件查询出routeEntity以及它所关联的实体
+     * */
+    List<RouteEntity> queryAllInfoList(Map<String , Object> params);
 }

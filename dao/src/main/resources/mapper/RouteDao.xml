@@ -25,15 +25,10 @@
 	<resultMap id="routeMap" type="org.spmul.entity.shiro.RouteEntity">
 		<result property="id" column="id"/>
 		<result property="path" column="path"/>
-		<result property="component" column="component"/>
-		<result property="name" column="name"/>
-		<result property="redirect" column="redirect"/>
-		<result property="alwaysShow" column="always_show"/>
-		<result property="hidden" column="hidden"/>
-		<result property="meta" column="meta"/>
 		<result property="pid" column="pid"/>
 		<result property="sort" column="sort"/>
 		<result property="prems" column="prems"/>
+		<result property="description" column="description"/>
 	</resultMap>
 
 	<resultMap id="allInfo" type="org.spmul.entity.shiro.RouteEntity" extends="routeMap">
@@ -79,7 +74,21 @@
 		</if>
 	</sql>
 
-	<select id="queryList" resultMap="allInfo">
+	<select id="queryList" resultType="org.spmul.entity.shiro.RouteEntity">
+		select * from sys_permission
+		<include refid="queryListWhereSql"/>
+		<choose>
+			<when test="sidx != null and sidx.trim() != ''">
+				order by ${sidx} ${order}
+			</when>
+
+		</choose>
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+
+	<select id="queryAllInfoList" resultMap="allInfo">
 		select * from sys_permission
 		<include refid="queryListWhereSql"/>
 		<choose>
@@ -102,24 +111,18 @@
 		INSERT INTO `sys_permission` (
 			`id`,
 			`path`,
-			`component`,
-			`name`,
-			`redirect`,
-			`always_show`,
-			`hidden`,
-			`meta`,
+			`sort`,
+			`perms`,
+			`description`,
 			`pid`
 		)
 		VALUES
 			(
 				#{id},
 				#{path},
-				#{component},
-				#{name},
-				#{redirect},
-				#{alwaysShow},
-				#{hidden},
-				#{meta},
+				#{sort},
+				#{perms},
+				#{description},
 				#{pid}
 			);
 	</insert>
@@ -128,15 +131,12 @@
 		update sys_permission
 		<set>
 			<if test="path != null">`path` = #{path}, </if>
-			<if test="component != null">`component` = #{component}, </if>
-			<if test="name != null">`name` = #{name}, </if>
-			<if test="redirect != null">`redirect` = #{redirect}, </if>
-			<if test="alwaysShow != null">`always_show` = #{alwaysShow}, </if>
-			<if test="hidden != null">`hidden` = #{hidden}, </if>
-			<if test="meta != null">`meta` = #{meta}, </if>
+			<if test="sort != null">`sort` = #{sort}, </if>
+			<if test="perms != null">`perms` = #{perms}, </if>
+			<if test="description != null">`description` = #{description},</if>
 			<if test="pid != null">`pid` = #{pid} </if>
 		</set>
-		where role_id = #{roleId}
+		where id = #{id}
 	</update>
 
 	<update id="deleteBatch">

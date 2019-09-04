@@ -3,34 +3,33 @@
 
     <el-form :inline="true">
       <el-form-item >
-        <!-- 新增用户按钮 -->
+        <!-- 新增菜单按钮 -->
         <el-button type="primary" @click="handleAdd">
-          <!--{{ $t('permission.addDepartment') }}-->
-          {{ $t('permission.addUser') }}
+          {{ $t('permission.addMenu') }}
         </el-button>
       </el-form-item>
     </el-form>
 
-    <!-- 用户列表 -->
-    <el-table :data="userList" style="width: 100%;margin-top:30px;" border>
-      <!-- 名称 -->
-      <el-table-column align="center" label="Name" width="220">
+    <!-- 菜单列表 -->
+    <el-table :data="menuList" style="width: 100%;margin-top:30px;" border>
+      <!--ID-->
+      <el-table-column align="center" label="ID" >
         <template slot-scope="scope">
-          {{ scope.row.username }}
+          {{ scope.row.id }}
         </template>
       </el-table-column>
 
-      <!-- 部门 -->
-      <el-table-column align="header-center" label="Department">
+      <!-- 路径 -->
+      <el-table-column align="center" label="Path" >
         <template slot-scope="scope">
-          {{ scope.row.department | departmentText }}
+          {{ scope.row.path }}
         </template>
       </el-table-column>
 
-      <!-- 角色列表 -->
-      <el-table-column align="header-center" label="Roles">
+      <!-- 父ID -->
+      <el-table-column align="header-center" label="Parent ID">
         <template slot-scope="scope">
-          {{ scope.row.roles | rolesText}}
+          {{ scope.row.pid | parentIdFilter}}
         </template>
       </el-table-column>
 
@@ -44,24 +43,24 @@
       <!--状态: 0 禁用 1 正常-->
       <el-table-column align="header-center" label="Status">
         <template slot-scope="scope">
-          {{ scope.row.status | statusText}}
+          {{ scope.row.isDel | statusText}}
         </template>
       </el-table-column>
 
-      <!--创建时间-->
-      <el-table-column align="header-center" label="CreateTime">
+      <!--权限字符串-->
+      <el-table-column align="header-center" label="permission">
         <template slot-scope="scope">
-          {{ scope.row.createTime }}
+          {{ scope.row.perms }}
         </template>
       </el-table-column>
 
       <!--操作-->
       <el-table-column align="center" label="Operations">
         <template slot-scope="scope">
-          <el-button type="primary" size="small" @click="handleEdit(scope)">
-            {{ $t('permission.editUser') }}
+          <el-button type="primary" v-waves size="small" @click="handleEdit(scope)">
+            {{ $t('permission.editMenu') }}
           </el-button>
-          <el-button type="danger" size="small" @click="handleDelete(scope)">
+          <el-button type="danger" v-waves size="small" @click="handleDelete(scope)">
             {{ $t('permission.delete') }}
           </el-button>
         </template>
@@ -80,47 +79,32 @@
       </el-pagination>
     </div>
 
-    <el-dialog :visible.sync="dialogVisible" :title="dialogType==='edit'?'Edit Department':'New Department'">
-      <el-form :model="user" label-width="80px" label-position="left">
+    <el-dialog :visible.sync="dialogVisible" :title="dialogType==='edit'?'Edit Menu':'New Menu'">
+      <el-form :model="menu" label-width="80px" label-position="left">
 
-        <!--名称-->
-        <el-form-item label="Name">
-          <el-input v-model="user.username" placeholder="User Name" />
+        <!--路径-->
+        <el-form-item label="Path">
+          <el-input v-model="menu.path" placeholder="Path used to match" />
         </el-form-item>
 
-        <!--密码-->
-        <el-form-item label="Pass">
-          <el-input type="password" v-model="user.password" placeholder="Password" />
+        <!--权限字符串-->
+        <el-form-item label="Permission">
+          <el-input v-model="menu.perms" placeholder="Permission Codes" />
         </el-form-item>
 
-        <!--免密密码-->
-        <el-form-item label="Free">
-          <el-input type="password" v-model="user.freePwd" placeholder="Free Password" />
+        <!--排序号-->
+        <el-form-item label="Sort">
+          <el-input v-model="menu.sort" placeholder="Sort priority" />
         </el-form-item>
 
-        <!--部门-->
-        <el-form-item label="Dep">
-          <el-select v-model="user.departmentId" placeholder="Department">
+        <!--pid-->
+        <el-form-item label="PID">
+          <el-select v-model="menu.pid" placeholder="Parent ID">
             <el-option
-              v-for="dep in departmentList"
-              :key="dep.departmentId"
-              :label="dep.departmentCode"
-              :value="dep.departmentId">
-            </el-option>
-          </el-select>
-        </el-form-item>
-
-        <!--角色们-->
-        <el-form-item label="Roles">
-          <el-select
-            v-model="user.roleIds"
-            :multiple="true"
-            placeholder="Roles">
-            <el-option
-              v-for="role in rolesList"
-              :key="role.id"
-              :label="role.name"
-              :value="role.id">
+              v-for="m in rootMenuList"
+              :key="m.id"
+              :label="m.path"
+              :value="m.id">
             </el-option>
           </el-select>
         </el-form-item>
@@ -128,13 +112,12 @@
         <!-- 描述-->
         <el-form-item label="Desc">
           <el-input
-            v-model="user.description"
+            v-model="menu.description"
             :autosize="{ minRows: 2, maxRows: 4}"
             type="textarea"
-            placeholder="User Description"
+            placeholder="Menu Description"
           />
         </el-form-item>
-
 
       </el-form>
       <div style="text-align:right;">
@@ -151,35 +134,34 @@
 </template>
 
 <script>
+  import waves from '@/directive/waves/index.js' // 水波纹指令
   import { deepClone } from '@/utils'
-  import { getDataPage , delUser, updateUser , addUser} from "@/api/auth/user";
-  import { getRoles } from '@/api/auth/role'
-  import { getDepartments } from '@/api/pub/department'
+  import { getDataPage , getRootMenuList, delMenu, updateMenu , addMenu} from "@/api/auth/menu";
+  import { asyncRoutes } from '@/router'
 
-
-  const defaultUser = {
-    username: '',
-    password: '',
-    freePwd: '',
-    status: 1,
-    description: '',
-    departmentId: 1,
-    roleIds: []
+  const defaultMenu = {
+    path: '',
+    pid: 0,
+    sort: 0,
+    perms: ''
   }
 
+  const rootMenuMap = {}
+
   export default {
-    name: "users",
+    name: "menus",
+    directives: {
+      waves
+    },
     data(){
       return {
-        user: Object.assign({} ,defaultUser),
+        menu: Object.assign({} ,defaultMenu),
         pageLimit: 10,
         currPage: 1,
         page: { list: []},
         dialogVisible: false,
         dialogType: 'new',
-        queryText: '',
-        departmentList: [],
-        rolesList: []
+        rootMenuList: []
       }
     },
     filters: {
@@ -188,10 +170,19 @@
           '0': '禁用',
           '1': '正常'
         }[status]
+      },
+      parentIdFilter: function ( pid ){
+        let path = rootMenuMap[pid]
+        if (path) {
+          return path
+        }else if(pid === 0){
+          return '[root]'
+        }
+        return pid
       }
     },
     computed: {
-      userList(){
+      menuList(){
         return this.page.list
       }
     },
@@ -205,46 +196,38 @@
     },
     created(){
       this.getDataPage()
-      this.getRoles()
-      this.getDepartments()
+      this.getRootMenuList()
     },
     methods: {
       async getDataPage(){
         const res = await getDataPage({page: this.currPage , limit: this.pageLimit})
         this.page = res.page
       },
-      async getRoles() {
-        const res = await getRoles()
-        this.rolesList = res.list
-      },
-      async getDepartments(){
-        const res = await getDepartments()
-        this.departmentList = res.list
+      async getRootMenuList(){
+        const res = await getRootMenuList()
+        Array.isArray(res.list) && res.list.forEach(root =>{
+          rootMenuMap[root.id] = root.path
+        })
+        this.rootMenuList = res.list
       },
       handleAdd(){
-        this.user = Object.assign({}, defaultUser)
+        this.menu = Object.assign({}, defaultMenu)
         this.dialogType = 'new'
         this.dialogVisible = true
       },
       handleEdit( scope ){
         this.dialogType = 'edit'
         this.dialogVisible = true
-        let cloneUser = deepClone(scope.row)
-        cloneUser.password = ''
-        cloneUser.freePwd = ''
-        if (Array.isArray(cloneUser.roles)){
-          cloneUser.roleIds = cloneUser.roles.map(role=>role.id)
-        }
-        this.user = cloneUser
+        this.menu = deepClone(scope.row)
       },
       handleDelete({ $index, row }){
-        this.$confirm('Confirm to remove the User?', 'Warning', {
+        this.$confirm('Confirm to remove the Menu?', 'Warning', {
           confirmButtonText: 'Confirm',
           cancelButtonText: 'Cancel',
           type: 'warning'
         })
           .then(async() => {
-            await delUser(row.userId)
+            await delMenu(row.id)
             this.getDataPage()
             this.$message({
               type: 'success',
@@ -256,23 +239,22 @@
       async confirm(){
         const isEdit = this.dialogType === 'edit'
         if (isEdit) {
-          await updateUser(this.user)
-
+          await updateMenu(this.menu)
         } else {
-          await addUser(this.user)
+          await addMenu(this.menu)
         }
 
         if (this.currPage === 1 ){
           this.getDataPage()
         }
 
-        const { description, username } = this.user
+        const { description, path } = this.menu
         this.dialogVisible = false
         this.$notify({
           title: 'Success',
           dangerouslyUseHTMLString: true,
           message: `
-            <div>User Nmae: ${username}</div>
+            <div>Path: ${path}</div>
             <div>Description: ${description}</div>
           `,
           type: 'success'

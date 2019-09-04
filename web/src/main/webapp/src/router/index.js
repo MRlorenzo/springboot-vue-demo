@@ -141,15 +141,15 @@ export const asyncRoutes = [
       roles: ['admin', 'editor'] // you can set roles in root nav
     },
     children: [
-      {
-        path: 'page',
-        component: () => import('@/views/permission/page'),
-        name: 'PagePermission',
-        meta: {
-          title: 'pagePermission',
-          roles: ['admin'] // or you can only set roles in sub nav
-        }
-      },
+      // {
+      //   path: 'page',
+      //   component: () => import('@/views/permission/page'),
+      //   name: 'PagePermission',
+      //   meta: {
+      //     title: 'pagePermission',
+      //     roles: ['admin'] // or you can only set roles in sub nav
+      //   }
+      // },
       // {
       //   path: 'directive',
       //   component: () => import('@/views/permission/directive'),
@@ -182,6 +182,14 @@ export const asyncRoutes = [
         name: 'Users',
         meta: {
           title: 'users'
+        }
+      },
+      {
+        path: 'menus',
+        component: () => import('@/views/permission/menus'),
+        name: 'Menus',
+        meta: {
+          title: 'menus'
         }
       }
     ]

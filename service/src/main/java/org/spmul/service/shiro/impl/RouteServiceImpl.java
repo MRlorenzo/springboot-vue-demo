@@ -36,4 +36,9 @@ public class RouteServiceImpl extends BaseServiceImpl<RouteEntity> implements Ro
     public List<String> queryPermissionsByUserId(Long userId) {
         return routeDao.queryPermissionsByUserId(userId);
     }
+
+    @Override
+    public List<RouteEntity> queryAllInfoList(Map<String, Object> params) {
+        return routeDao.queryAllInfoList(params);
+    }
 }
