@@ -30,6 +30,8 @@ import java.util.Set;
 public interface SysUserService extends BaseDao<SysUserEntity> {
 
 
+    List<SysUserEntity> queryAllInfoList(Map<String , Object> params);
+
     Set<String> queryPermissionsByUserId(Long userId);
 
     /**

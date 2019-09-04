@@ -211,7 +211,7 @@
     },
     methods: {
       async getDataPage(){
-        const res = await getDataPage({page: this.page.currPage , limit: this.pageLimit})
+        const res = await getDataPage({page: this.currPage , limit: this.pageLimit})
         this.page = res.page
       },
       async getRoles() {
@@ -230,7 +230,13 @@
       handleEdit( scope ){
         this.dialogType = 'edit'
         this.dialogVisible = true
-        this.user = deepClone(scope.row)
+        let cloneUser = deepClone(scope.row)
+        cloneUser.password = ''
+        cloneUser.freePwd = ''
+        if (Array.isArray(cloneUser.roles)){
+          cloneUser.roleIds = cloneUser.roles.map(role=>role.id)
+        }
+        this.user = cloneUser
       },
       handleDelete({ $index, row }){
         this.$confirm('Confirm to remove the User?', 'Warning', {
@@ -261,13 +267,13 @@
           this.getDataPage()
         }
 
-        const { description, name } = this.user
+        const { description, username } = this.user
         this.dialogVisible = false
         this.$notify({
           title: 'Success',
           dangerouslyUseHTMLString: true,
           message: `
-            <div>User Nmae: ${name}</div>
+            <div>User Nmae: ${username}</div>
             <div>Description: ${description}</div>
           `,
           type: 'success'

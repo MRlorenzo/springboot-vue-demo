@@ -22,13 +22,14 @@ public class DepartmentEntity implements Serializable {
 	 */
 	private String name;
 	/**
-	 * 部门英文名称
-	 */
-	private String enName;
-	/**
 	 * 部门编号
 	 */
 	private String departmentCode;
+
+	/**
+	 * 描述
+	 */
+	private String description;
 
 	private Integer sort;
 

@@ -15,6 +15,8 @@ import java.util.Map;
  */
 public interface SysUserDao extends BaseDao<SysUserEntity> {
 
+    List<SysUserEntity> queryAllInfoList(Map<String , Object> params);
+
     /**
      * 根据用户名，查询系统用户
      */

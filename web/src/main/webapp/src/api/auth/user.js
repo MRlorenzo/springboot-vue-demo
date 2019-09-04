@@ -22,7 +22,7 @@ export function getDataPage( data ){
   return request({
     url: '/user/page',
     method: 'get',
-    data
+    params: data
   })
 }
 

@@ -1,5 +1,6 @@
 package org.spmul.service.shiro.impl;
 
+import org.spmul.common.util.RRException;
 import org.spmul.dao.shiro.*;
 import org.spmul.entity.shiro.RouteEntity;
 import org.spmul.entity.shiro.SysUserEntity;
@@ -38,6 +39,10 @@ public class SysUserServiceImpl extends BaseServiceImpl<SysUserEntity> implement
         return sysUserDao;
     }
 
+    @Override
+    public List<SysUserEntity> queryAllInfoList(Map<String, Object> params) {
+        return sysUserDao.queryAllInfoList(params);
+    }
 
     @Override
     public Set<String> queryPermissionsByUserId(Long userId) {
@@ -95,37 +100,47 @@ public class SysUserServiceImpl extends BaseServiceImpl<SysUserEntity> implement
     @Override
     @Transactional
     public void save(SysUserEntity user) {
-        if(user.getFreePwd() != null){
-            if(!checkFreePwd(user.getFreePwd())){
-                throw new RuntimeException("系统已存在该免密密码.");
-            }
+        if (StringUtils.isEmpty(user.getPassword())){
+            throw new RRException("密码不能为空");
         }
+
+        userBeforeCheck(user);
+
         user.setStatus(1);
         user.setCreateTime(new Date());
-        //sha256加密
-        user.setPassword(user.getPassword() );//new Sha256Hash(user.getPassword()).toHex());
         sysUserDao.save(user);
 
         //保存用户与角色关系
-        sysUserRoleService.saveOrUpdate(user.getUserId(), user.getRoles().stream().map(role->role.getId()).collect(Collectors.toList()));
+        sysUserRoleService.saveOrUpdate(user.getUserId(), user.getRoleIds());
     }
 
-    private boolean checkFreePwd(String pwd){
-        SysUserEntity user = sysUserDao.queryObjectByFreePwd(pwd);
-        return user == null;
+    private void userBeforeCheck(SysUserEntity user){
+
+        if( !StringUtils.isEmpty(user.getFreePwd())){
+            SysUserEntity u = sysUserDao.queryObjectByFreePwd(user.getFreePwd());
+            if( u != null && user.getUserId() != u.getUserId()){
+                throw new RRException("系统已存在该免密密码.");
+            }
+        } else {
+            user.setFreePwd(null);
+        }
+
+        if (user.getDepartmentId() == null){
+            throw new RRException("请选择部门");
+        }
+
+        if (user.getRoleIds() == null || user.getRoleIds().size() == 0){
+            throw new RRException("请选择角色");
+        }
     }
 
     @Override
     @Transactional
     public int update(SysUserEntity user) {
-        if(StringUtils.isEmpty(user.getPassword())){
-            user.setPassword(null);
-        }else{
-            user.setPassword(user.getPassword()/*new Sha256Hash(user.getPassword()).toHex()*/);
-        }
+        userBeforeCheck(user);
         int update = sysUserDao.update(user);
         //保存用户与角色关系
-        sysUserRoleService.saveOrUpdate(user.getUserId(),  user.getRoles().stream().map(role->role.getId()).collect(Collectors.toList()));
+        sysUserRoleService.saveOrUpdate(user.getUserId(),  user.getRoleIds());
         return update;
     }
 

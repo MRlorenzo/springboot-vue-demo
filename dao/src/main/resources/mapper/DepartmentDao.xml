@@ -7,7 +7,7 @@
     <resultMap type="org.spmul.entity.shiro.DepartmentEntity" id="departmentMap">
         <result property="departmentId" column="department_id"/>
         <result property="name" column="name"/>
-        <result property="enName" column="en_name"/>
+        <result property="description" column="description"/>
         <result property="departmentCode" column="department_code"/>
         <result property="sort" column="sort"/>
     </resultMap>
@@ -21,8 +21,8 @@
 			<if test="name != null and name.trim()!=''">
 				`name` like concat('%',#{name},'%')
 			</if>
-			<if test="enName != null and enName.trim() != ''">
-				and en_name like concat('%',#{enName},'%')
+			<if test="description != null and description.trim() != ''">
+				and description like concat('%',#{description},'%')
 			</if>
 			<if test="departmentCode != null and departmentCode.trim() != ''">
 				and department_code = #{departmentCode}
@@ -50,14 +50,14 @@
 		insert into tb_department
 		(
 			`name`,
-			`en_name`,
+			`description`,
 			`department_code`,
 			`sort`
 		)
 		values
 		(
 			#{name},
-			#{enName},
+			#{description},
 			#{departmentCode},
 			#{sort}
 		)
@@ -67,7 +67,7 @@
 		update tb_department
 		<set>
 			<if test="name != null">`name` = #{name}, </if>
-			<if test="enName != null">`en_name` = #{enName}, </if>
+			<if test="description != null">`description` = #{description}, </if>
 			<if test="departmentCode != null">`department_code` = #{departmentCode},</if>
 			<if test="sort != null">`sort` = #{sort}</if>
 		</set>
@@ -87,7 +87,7 @@
 
 
 	<select id="queryDepartmentIdByString">
-		select department_id from tb_department where name=#{value} or en_name=#{value} or department_code=#{value}
+		select department_id from tb_department where name=#{value} or description=#{value} or department_code=#{value}
 	</select>
 
 </mapper>

@@ -152,6 +152,12 @@ public class GlobalExceptionAdvice {
         return R.error(400 , "content_type_not_supported");
     }
 
+    @ExceptionHandler(value = RRException.class)
+    public R rrExceptionHandle(RRException e){
+
+        return R.error(e.getMsg());
+    }
+
     /**
      * 和以上都不匹配的异常时
      * @param e

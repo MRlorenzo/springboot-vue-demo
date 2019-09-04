@@ -1,6 +1,6 @@
 import { asyncRoutes } from './role/routes.js'
 import serverUsers from './server_users'
-
+import { deepClone } from "../../src/utils";
 
 
 export default [
@@ -23,7 +23,7 @@ export default [
     type: 'get',
     response: config => {
       // 假设我们登陆的账号是admin
-      const [info] = serverUsers
+      const [info] = deepClone(serverUsers)
 
       // mock error
       if (!info) {
