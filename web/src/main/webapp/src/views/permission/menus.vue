@@ -2,16 +2,34 @@
   <div class="app-container">
 
     <el-form :inline="true">
+
+      <el-form-item label="PID">
+        <el-select v-model="q.pid" placeholder="Parent ID">
+          <el-option
+            v-for="m in rootMenuList"
+            :key="m.id"
+            :label="m.path"
+            :value="m.id">
+          </el-option>
+        </el-select>
+      </el-form-item>
+
+      <el-form-item>
+        <el-button type="primary" @click="loadData">
+          Search
+        </el-button>
+      </el-form-item>
+
       <el-form-item >
         <!-- 新增菜单按钮 -->
-        <el-button type="primary" @click="handleAdd">
+        <el-button type="info" @click="handleAdd">
           {{ $t('permission.addMenu') }}
         </el-button>
       </el-form-item>
     </el-form>
 
     <!-- 菜单列表 -->
-    <el-table :data="menuList" style="width: 100%;margin-top:30px;" border>
+    <el-table :data="menuList" style="width: 100%;" border>
       <!--ID-->
       <el-table-column align="center" label="ID" >
         <template slot-scope="scope">
@@ -72,7 +90,7 @@
         @size-change="handleSizeChange"
         @current-change="handleCurrentChange"
         :current-page="currPage"
-        :page-sizes="[10 , 20]"
+        :page-sizes="[5, 10, 15, 20]"
         :page-size="pageLimit"
         layout="total, sizes, prev, pager, next, jumper"
         :total="page.totalCount">
@@ -130,6 +148,11 @@
       </div>
     </el-dialog>
 
+    <!-- you can add element-ui's tooltip -->
+    <el-tooltip placement="top" content="tooltip">
+      <back-to-top :custom-style="myBackToTopStyle" :visibility-height="300" :back-position="50" transition-name="fade" />
+    </el-tooltip>
+
   </div>
 </template>
 
@@ -138,7 +161,7 @@
   import { deepClone } from '@/utils'
   import { getDataPage , getRootMenuList, delMenu, updateMenu , addMenu} from "@/api/auth/menu";
   import { asyncRoutes } from '@/router'
-
+  import BackToTop from '@/components/BackToTop'
   const defaultMenu = {
     path: '',
     pid: 0,
@@ -153,15 +176,30 @@
     directives: {
       waves
     },
+    components: { BackToTop },
     data(){
       return {
         menu: Object.assign({} ,defaultMenu),
-        pageLimit: 10,
+        pageLimit: 5,
         currPage: 1,
         page: { list: []},
         dialogVisible: false,
         dialogType: 'new',
-        rootMenuList: []
+        rootMenuList: [],
+        // 查询参数
+        q: {
+          pid: 0
+        },
+        // customizable button style, show/hide critical point, return position
+        myBackToTopStyle: {
+          right: '50px',
+          bottom: '50px',
+          width: '40px',
+          height: '40px',
+          'border-radius': '4px',
+          'line-height': '45px', // 请保持与高度一致以垂直居中 Please keep consistent with height to center vertically
+          background: '#e7eaf1'// 按钮的背景颜色 The background color of the button
+        }
       }
     },
     filters: {
@@ -175,8 +213,6 @@
         let path = rootMenuMap[pid]
         if (path) {
           return path
-        }else if(pid === 0){
-          return '[root]'
         }
         return pid
       }
@@ -188,27 +224,29 @@
     },
     watch:{
       currPage() {
-        this.getDataPage()
+        this.loadData()
       },
       pageLimit(){
-        this.getDataPage()
+        this.loadData()
       }
     },
     created(){
-      this.getDataPage()
+      this.loadData()
       this.getRootMenuList()
     },
     methods: {
-      async getDataPage(){
-        const res = await getDataPage({page: this.currPage , limit: this.pageLimit})
+      async loadData(){
+        const res = await getDataPage(Object.assign({page: this.currPage , limit: this.pageLimit } , this.q))
         this.page = res.page
       },
       async getRootMenuList(){
         const res = await getRootMenuList()
-        Array.isArray(res.list) && res.list.forEach(root =>{
+        let dataList = res.list || []
+        dataList.unshift(Object.assign(deepClone(defaultMenu) , { id: 0 , path : '[root]'}))
+        dataList.forEach(root =>{
           rootMenuMap[root.id] = root.path
         })
-        this.rootMenuList = res.list
+        this.rootMenuList = dataList
       },
       handleAdd(){
         this.menu = Object.assign({}, defaultMenu)
@@ -228,7 +266,7 @@
         })
           .then(async() => {
             await delMenu(row.id)
-            this.getDataPage()
+            this.loadData()
             this.$message({
               type: 'success',
               message: 'Delete succed!'
@@ -245,7 +283,7 @@
         }
 
         if (this.currPage === 1 ){
-          this.getDataPage()
+          this.loadData()
         }
 
         const { description, path } = this.menu

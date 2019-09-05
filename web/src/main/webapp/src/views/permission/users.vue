@@ -2,10 +2,63 @@
   <div class="app-container">
 
     <el-form :inline="true">
+
+      <el-form-item >
+        <el-input v-model="q.username" placeholder="User Name" />
+      </el-form-item>
+
+      <el-form-item>
+        <el-date-picker
+          v-model="searchTime"
+          size="mini"
+          type="daterange"
+          range-separator="至"
+          start-placeholder="开始日期"
+          end-placeholder="结束日期"
+          value-format="yyyy-MM-dd"
+        >
+        </el-date-picker>
+      </el-form-item>
+
+      <el-form-item label="Status">
+        <el-switch
+          v-model="q.status"
+          active-value="0"
+          inactive-value="1"
+          active-text="禁用"
+          inactive-text="正常">
+        </el-switch>
+      </el-form-item>
+
+      <!--部门-->
+      <el-form-item label="Dep">
+        <el-select v-model="q.departmentId" placeholder="Department">
+          <el-option
+            v-for="dep in departmentList"
+            :key="dep.departmentId"
+            :label="dep.departmentCode"
+            :value="dep.departmentId">
+          </el-option>
+        </el-select>
+      </el-form-item>
+
+      <el-form-item>
+        <!-- 搜索按钮 -->
+        <el-button type="primary" @click="loadData">
+          Search
+        </el-button>
+      </el-form-item>
+
+      <el-form-item>
+        <!-- 重置按钮 -->
+        <el-button @click="resetQueryData" >
+          Reset
+        </el-button>
+      </el-form-item>
+
       <el-form-item >
         <!-- 新增用户按钮 -->
-        <el-button type="primary" @click="handleAdd">
-          <!--{{ $t('permission.addDepartment') }}-->
+        <el-button type="info" @click="handleAdd">
           {{ $t('permission.addUser') }}
         </el-button>
       </el-form-item>
@@ -73,7 +126,7 @@
         @size-change="handleSizeChange"
         @current-change="handleCurrentChange"
         :current-page="currPage"
-        :page-sizes="[10 , 20]"
+        :page-sizes="[5, 10, 15, 20]"
         :page-size="pageLimit"
         layout="total, sizes, prev, pager, next, jumper"
         :total="page.totalCount">
@@ -147,6 +200,10 @@
       </div>
     </el-dialog>
 
+    <!-- you can add element-ui's tooltip -->
+    <el-tooltip placement="top" content="tooltip">
+      <back-to-top :custom-style="myBackToTopStyle" :visibility-height="300" :back-position="50" transition-name="fade" />
+    </el-tooltip>
   </div>
 </template>
 
@@ -155,7 +212,7 @@
   import { getDataPage , delUser, updateUser , addUser} from "@/api/auth/user";
   import { getRoles } from '@/api/auth/role'
   import { getDepartments } from '@/api/pub/department'
-
+  import BackToTop from '@/components/BackToTop'
 
   const defaultUser = {
     username: '',
@@ -167,19 +224,41 @@
     roleIds: []
   }
 
+  const defaultQueryData = {
+    username: null,
+    startTime: null,
+    endTime: null,
+    status: 1,
+    departmentId: null
+  }
+
   export default {
     name: "users",
+    components: { BackToTop },
     data(){
       return {
         user: Object.assign({} ,defaultUser),
-        pageLimit: 10,
+        pageLimit: 5,
         currPage: 1,
         page: { list: []},
         dialogVisible: false,
         dialogType: 'new',
         queryText: '',
         departmentList: [],
-        rolesList: []
+        rolesList: [],
+        // 查询参数
+        q: Object.assign({} , defaultQueryData),
+        searchTime: [],
+        // customizable button style, show/hide critical point, return position
+        myBackToTopStyle: {
+          right: '50px',
+          bottom: '50px',
+          width: '40px',
+          height: '40px',
+          'border-radius': '4px',
+          'line-height': '45px', // 请保持与高度一致以垂直居中 Please keep consistent with height to center vertically
+          background: '#e7eaf1'// 按钮的背景颜色 The background color of the button
+        }
       }
     },
     filters: {
@@ -197,20 +276,32 @@
     },
     watch:{
       currPage() {
-        this.getDataPage()
+        this.loadData()
       },
       pageLimit(){
-        this.getDataPage()
+        this.loadData()
+      },
+      searchTime( times ){
+        if (times == null){
+          return
+        }
+        let [startDate , endDate] = times
+        if ( startDate && endDate){
+          Object.assign(this.q , {
+            startTime: startDate,
+            endTime: endDate
+          })
+        }
       }
     },
     created(){
-      this.getDataPage()
+      this.loadData()
       this.getRoles()
       this.getDepartments()
     },
     methods: {
-      async getDataPage(){
-        const res = await getDataPage({page: this.currPage , limit: this.pageLimit})
+      async loadData(){
+        const res = await getDataPage(Object.assign({page: this.currPage , limit: this.pageLimit} , this.q))
         this.page = res.page
       },
       async getRoles() {
@@ -245,7 +336,7 @@
         })
           .then(async() => {
             await delUser(row.userId)
-            this.getDataPage()
+            this.loadData()
             this.$message({
               type: 'success',
               message: 'Delete succed!'
@@ -263,7 +354,7 @@
         }
 
         if (this.currPage === 1 ){
-          this.getDataPage()
+          this.loadData()
         }
 
         const { description, username } = this.user
@@ -283,6 +374,10 @@
       },
       handleCurrentChange(val) {
         this.currPage = val
+      },
+      resetQueryData(){
+        this.q = Object.assign({} , defaultQueryData)
+        this.searchTime = []
       }
     }
   }

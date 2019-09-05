@@ -98,7 +98,7 @@ public class TestController extends BaseController<OrderEntity>{
      * @param systemNo
      * @return
      */
-    @GetMapping(value = "/sleep/one", produces = "application/json")
+    @GetMapping("/sleep/one")
     @SysAllLog(operation = "这是一个测试是否安全退出应用的方法", optTypeName = "springboot中断测试")
     public Long sleepOne(String systemNo){
         log.info("模拟业务处理30秒，请求参数：{}", systemNo);

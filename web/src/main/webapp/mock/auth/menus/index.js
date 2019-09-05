@@ -19,21 +19,25 @@ export default [
     url: '/permission/menu/page',
     type: 'get',
     response: config => {
-      let {page , limit} = config.query
+      let {page , limit , pid} = config.query
       page = page || 1
       limit = limit || 10
 
       let offset = (page - 1) * limit
       let end = parseInt(offset) + parseInt(limit)
       let totalPage = Math.ceil(menus.length / limit)
-      let list = menus.filter((item , index) => index >= offset && index < end)
+      let searchList = menus
+        .filter( item => pid == 0 || pid == item.id || pid == item.pid )
+      let list = searchList
+        .filter((item , index) => index >= offset && index < end)
+
       return {
         code: 0,
         page: {
           currPage: page,
           list,
           pageSize: limit,
-          totalCount: menus.length,
+          totalCount: searchList.length,
           totalPage
         }
       }
