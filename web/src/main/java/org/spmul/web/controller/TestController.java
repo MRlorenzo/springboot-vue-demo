@@ -11,6 +11,7 @@ import org.spmul.entity.TestEntiry;
 import org.spmul.redis.RedisUtil;
 import org.spmul.service.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -88,6 +89,31 @@ public class TestController extends BaseController<OrderEntity>{
     @RequestMapping("/haha")
     public String haha(){
         return TestEntiry.showName();
+    }
+
+    /**
+     * 在触发这个接口的业务处理之后，业务逻辑处理时间长达30秒，
+     * 需要在处理结束前，发起停止指令，验证是否能够正常返回。
+     * 验证时所使用的kill指令：kill -2（Ctrl + C）、kill -15、kill -9。
+     * @param systemNo
+     * @return
+     */
+    @GetMapping(value = "/sleep/one", produces = "application/json")
+    @SysAllLog(operation = "这是一个测试是否安全退出应用的方法", optTypeName = "springboot中断测试")
+    public Long sleepOne(String systemNo){
+        log.info("模拟业务处理30秒，请求参数：{}", systemNo);
+        Long serverTime = System.currentTimeMillis();
+        try {
+            Thread.sleep(30*1000L);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        while (System.currentTimeMillis() < serverTime + (30 * 1000)){
+            log.info("正在处理业务，当前时间：{}，开始时间：{}", System.currentTimeMillis(), serverTime);
+        }
+
+        log.info("模拟业务处理1分钟，响应参数：{}");
+        return serverTime;
     }
 
 
