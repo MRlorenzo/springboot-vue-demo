@@ -3,7 +3,7 @@
 
     <el-form :inline="true">
 
-      <el-form-item label="PID">
+      <el-form-item label="PID" v-show="!showLocalMenu">
         <el-select v-model="q.pid" placeholder="Parent ID">
           <el-option
             v-for="m in rootMenuList"
@@ -14,22 +14,37 @@
         </el-select>
       </el-form-item>
 
+      <el-form-item v-show="!showLocalMenu">
+        <el-input v-model="q.path" placeholder="Path used to match" />
+      </el-form-item>
+
       <el-form-item>
         <el-button type="primary" @click="loadData">
           Search
         </el-button>
       </el-form-item>
 
-      <el-form-item >
+      <el-form-item v-show="!showLocalMenu">
         <!-- 新增菜单按钮 -->
         <el-button type="info" @click="handleAdd">
           {{ $t('permission.addMenu') }}
         </el-button>
       </el-form-item>
+
+      <el-form-item label="View">
+        <el-switch
+          v-model="showLocalMenu"
+          :active-value="false"
+          :inactive-value="true"
+          active-text="DB"
+          inactive-text="Local">
+        </el-switch>
+      </el-form-item>
+
     </el-form>
 
     <!-- 菜单列表 -->
-    <el-table :data="menuList" style="width: 100%;" border>
+    <el-table :data="menuList" v-show="!showLocalMenu" style="width: 100%;" border>
       <!--ID-->
       <el-table-column align="center" label="ID" >
         <template slot-scope="scope">
@@ -85,17 +100,57 @@
       </el-table-column>
     </el-table>
 
-    <div class="block">
-      <el-pagination
-        @size-change="handleSizeChange"
-        @current-change="handleCurrentChange"
-        :current-page="currPage"
-        :page-sizes="[5, 10, 15, 20]"
-        :page-size="pageLimit"
-        layout="total, sizes, prev, pager, next, jumper"
-        :total="page.totalCount">
-      </el-pagination>
-    </div>
+    <el-pagination
+      v-show="!showLocalMenu"
+      @size-change="handleSizeChange"
+      @current-change="handleCurrentChange"
+      :current-page="currPage"
+      :page-sizes="[5, 10, 15, 20]"
+      :page-size="pageLimit"
+      layout="total, sizes, prev, pager, next, jumper"
+      :total="page.totalCount">
+    </el-pagination>
+
+    <!-- 本地的未上传的路由（菜单项） -->
+    <el-table :data="undefinedMenuList" v-show="showLocalMenu" style="width: 100%;" border>
+
+      <!-- 路径 -->
+      <el-table-column align="center" label="Path" >
+        <template slot-scope="scope">
+          {{ scope.row.path }}
+        </template>
+      </el-table-column>
+
+      <!-- 父路径 -->
+      <el-table-column align="header-center" label="Parent Path">
+        <template slot-scope="scope">
+          {{ scope.row.parentPath }}
+        </template>
+      </el-table-column>
+
+      <!-- 名字 -->
+      <el-table-column align="header-center" label="Name">
+        <template slot-scope="scope">
+          {{ scope.row.name  }}
+        </template>
+      </el-table-column>
+
+      <!--title-->
+      <el-table-column align="header-center" label="Title">
+        <template slot-scope="scope">
+          {{ scope.row.title  }}
+        </template>
+      </el-table-column>
+
+      <!--操作-->
+      <el-table-column align="center" label="Operations">
+        <template slot-scope="scope">
+          <el-button type="primary" v-waves size="small" @click="handleAddLocalMenu( scope )">
+            {{ $t('permission.addMenu') }}
+          </el-button>
+        </template>
+      </el-table-column>
+    </el-table>
 
     <el-dialog :visible.sync="dialogVisible" :title="dialogType==='edit'?'Edit Menu':'New Menu'">
       <el-form :model="menu" label-width="80px" label-position="left">
@@ -158,9 +213,10 @@
 
 <script>
   import waves from '@/directive/waves/index.js' // 水波纹指令
-  import { deepClone } from '@/utils'
-  import { getDataPage , getRootMenuList, delMenu, updateMenu , addMenu} from "@/api/auth/menu";
+  import { deepClone, filterUndefinedMenus } from '@/utils'
+  import { getDataPage , getRootMenuList, getMenuList, delMenu, updateMenu , addMenu} from "@/api/auth/menu";
   import { asyncRoutes } from '@/router'
+  import i18n from '@/lang'
   import BackToTop from '@/components/BackToTop'
   const defaultMenu = {
     path: '',
@@ -190,6 +246,7 @@
         q: {
           pid: 0
         },
+        showLocalMenu: false,
         // customizable button style, show/hide critical point, return position
         myBackToTopStyle: {
           right: '50px',
@@ -220,6 +277,14 @@
     computed: {
       menuList(){
         return this.page.list
+      },
+      undefinedMenuList(){
+
+        return filterUndefinedMenus(deepClone(asyncRoutes) , deepClone(this.rootMenuList))
+          .map(menu =>{
+            menu.title = i18n.t(`route.${menu.langKey}`)
+            return menu
+          })
       }
     },
     watch:{
@@ -257,6 +322,28 @@
         this.dialogType = 'edit'
         this.dialogVisible = true
         this.menu = deepClone(scope.row)
+      },
+      handleAddLocalMenu( scope ){
+        let cloneItem = deepClone(scope.row)
+        let pid = 0
+        if (cloneItem.pid){
+          pid = cloneItem.pid
+        }else if (cloneItem.parentPath){
+          Object.keys(rootMenuMap).forEach(id => {
+            let path = rootMenuMap[id]
+            if (path === cloneItem.parentPath){
+              pid = parseInt(id)
+            }
+          })
+        }
+
+        let menu = Object.assign(deepClone(defaultMenu) , {
+          path: cloneItem.path,
+          pid
+        })
+        this.menu = menu
+        this.dialogType = 'new'
+        this.dialogVisible = true
       },
       handleDelete({ $index, row }){
         this.$confirm('Confirm to remove the Menu?', 'Warning', {

@@ -10,7 +10,18 @@ export default [
 
       return {
         code: 0,
-       list: rootMenus
+        list: rootMenus
+      }
+    }
+  },
+
+  {
+    url: '/permission/menu/all',
+    type: 'get',
+    response: _=>{
+      return {
+        code: 0,
+        list: menus
       }
     }
   },

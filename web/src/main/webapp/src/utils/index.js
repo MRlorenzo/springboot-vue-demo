@@ -395,3 +395,40 @@ function equalRouteByPath( route , sourceRoutes ){
   }
   return target
 }
+
+/**
+ * 根据本地的路由菜单过滤出服务器未定义的菜单
+ * @param routes  路由菜单
+ * @param menus   服务器菜单
+ */
+export function filterUndefinedMenus( routes = [] , menus = [] , { parentPath , pid } = {}){
+  let list = []
+  routes.filter(r=>r.name && r.path && !~r.path.indexOf(':')).forEach( route => {
+    let t = equalRouteByPath( route , menus )
+
+    if (t == null){
+      list.push({
+        path: route.path,
+        name: route.name,
+        langKey: route.meta && route.meta.title,
+        parentPath,
+        pid
+      })
+    }
+
+    if (route.children && route.children.length){
+
+      let childrenMenus = filterUndefinedMenus( route.children , t && t.children || [] , {
+        parentPath: route.path,
+        pid: t && t.id
+      } )
+
+      list = list.concat(childrenMenus)
+    }
+
+  })
+
+  console.log(list)
+
+  return list
+}

@@ -99,7 +99,7 @@ public class PermissionController {
     public R getRootMenus(){
         Map<String , Object> params = new HashMap<>();
         params.put("pid" , 0);
-        List<RouteEntity> menus = routeService.queryList(params);
+        List<RouteEntity> menus = routeService.queryAllInfoList(params);
         return R.ok().put("list" , menus);
     }
 

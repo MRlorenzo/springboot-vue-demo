@@ -72,6 +72,9 @@
 		<if test="pid != null ">
 			and pid = #{pid}
 		</if>
+		<if test="path != null">
+			and path LIKE concat('%',#{path},'%')
+		</if>
 	</sql>
 
 	<select id="queryList" resultType="org.spmul.entity.shiro.RouteEntity">

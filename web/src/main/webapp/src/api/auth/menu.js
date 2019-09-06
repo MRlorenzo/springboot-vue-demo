@@ -14,9 +14,19 @@ export function getDataPage( data ){
 /*
 * 获取根菜单的列表
 * */
-export function getRootMenuList( ){
+export function getRootMenuList(){
   return request({
     url: '/permission/menu/root',
+    method: 'get'
+  })
+}
+
+/**
+ * 获取服务器上存储的所有菜单
+ */
+export function getMenuList(){
+  return request({
+    url: '/permission/menu/all',
     method: 'get'
   })
 }

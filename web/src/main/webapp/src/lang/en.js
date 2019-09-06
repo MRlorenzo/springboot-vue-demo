@@ -99,8 +99,10 @@ export default {
     cancel: 'Cancel',
     addDepartment: 'New Department',
     editDepartment: 'Edit Department',
-    editUser: '编辑用户',
-    addUser: '新增用户'
+    editUser: 'Edit User',
+    addUser: 'New User',
+    addMenu: 'New Menu',
+    editMenu: 'Edit Menu'
   },
   guide: {
     description: 'The guide page is useful for some people who entered the project for the first time. You can briefly introduce the features of the project. Demo is based on ',

@@ -407,6 +407,29 @@ export const asyncRoutes = [
     ]
   },
 
+  // {
+  //   id: 52,
+  //   path: '/table',
+  //   children: [
+  //     {
+  //       id: 53,
+  //       path: 'dynamic-table'
+  //     },
+  //     {
+  //       id: 54,
+  //       path: 'drag-table'
+  //     },
+  //     {
+  //       id: 55,
+  //       path: 'inline-edit-table'
+  //     },
+  //     {
+  //       id: 56,
+  //       path: 'complex-table'
+  //     }
+  //   ]
+  // },
+
   {
     id: 28,
     path: '/error',
