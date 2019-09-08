@@ -1,7 +1,7 @@
 /* eslint-disable */
 require('script-loader!file-saver');
-import XLSX from 'xlsx'
-
+import XLSX from 'xlsx-style'
+import { cell } from '@/utils'
 function generateArray(table) {
   var out = [];
   var rows = table.querySelectorAll('tr');
@@ -76,8 +76,11 @@ function sheet_from_array_of_arrays(data, opts) {
       if (range.s.c > C) range.s.c = C;
       if (range.e.r < R) range.e.r = R;
       if (range.e.c < C) range.e.c = C;
+      let {v , s} = data[R][C]
       var cell = {
-        v: data[R][C]
+        v,
+        //s: { font: { sz: 14, bold: true, color: { rgb: "FFFFAA00" } }, fill: { bgColor: { indexed: 64 }, fgColor: { rgb: "FFFF00" } } }
+        s
       };
       if (cell.v == null) continue;
       var cell_ref = XLSX.utils.encode_cell({
@@ -105,7 +108,7 @@ function Workbook() {
   this.SheetNames = [];
   this.Sheets = {};
 }
-
+// 字符串转字符流
 function s2ab(s) {
   var buf = new ArrayBuffer(s.length);
   var view = new Uint8Array(buf);
@@ -156,10 +159,14 @@ export function export_json_to_excel({
   /* original data */
   filename = filename || 'excel-list'
   data = [...data]
-  data.unshift(header);
+  data.unshift(header.map(d=>cell(d)));
 
   for (let i = multiHeader.length-1; i > -1; i--) {
-    data.unshift(multiHeader[i])
+    let list = multiHeader[i]
+    if(Array.isArray(list)){
+      list = list.map(d=>cell(d))
+    }
+    data.unshift(list)
   }
 
   var ws_name = "SheetJS";
@@ -167,9 +174,15 @@ export function export_json_to_excel({
     ws = sheet_from_array_of_arrays(data);
 
   if (merges.length > 0) {
+
     if (!ws['!merges']) ws['!merges'] = [];
     merges.forEach(item => {
-      ws['!merges'].push(XLSX.utils.decode_range(item))
+      if (typeof item === 'string'){
+        ws['!merges'].push(XLSX.utils.decode_range(item))
+      } else {
+        ws['!merges'].push(item)
+      }
+
     })
   }
 

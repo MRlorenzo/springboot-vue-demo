@@ -51,7 +51,7 @@
 
 <script>
 import { fetchList } from '@/api/article'
-
+import { cell } from '@/utils'
 export default {
   name: 'SelectExcel',
   data() {
@@ -101,7 +101,7 @@ export default {
       }
     },
     formatJson(filterVal, jsonData) {
-      return jsonData.map(v => filterVal.map(j => v[j]))
+      return jsonData.map(v => filterVal.map(j => v[j]).map(_=>cell(_)))
     }
   }
 }

@@ -18,7 +18,7 @@
         <el-input v-model="q.path" placeholder="Path used to match" />
       </el-form-item>
 
-      <el-form-item>
+      <el-form-item v-show="!showLocalMenu">
         <el-button type="primary" @click="loadData">
           Search
         </el-button>

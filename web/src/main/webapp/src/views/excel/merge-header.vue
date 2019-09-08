@@ -47,7 +47,7 @@
 
 <script>
 import { fetchList } from '@/api/article'
-import { parseTime } from '@/utils'
+import { parseTime , cell } from '@/utils'
 
 export default {
   name: 'MergeHeader',
@@ -94,7 +94,7 @@ export default {
         } else {
           return v[j]
         }
-      }))
+      }).map(_=>cell(_)))
     }
   }
 }

@@ -46,7 +46,7 @@
 
 <script>
 import { fetchList } from '@/api/article'
-import { parseTime } from '@/utils'
+import { parseTime , cell} from '@/utils'
 // options components
 import FilenameOption from './components/FilenameOption'
 import AutoWidthOption from './components/AutoWidthOption'
@@ -87,7 +87,26 @@ export default {
           data,
           filename: this.filename,
           autoWidth: this.autoWidth,
-          bookType: this.bookType
+          bookType: this.bookType,
+          merges: [{
+
+            s: {//s为开始
+
+              c: 1,//开始列
+
+              r: 0//可以看成开始行,实际是取值范围
+
+            },
+
+            e: {//e结束
+
+              c: 4,//结束列
+
+              r: 0//结束行
+
+            }
+
+          }]
         })
         this.downloadLoading = false
       })
@@ -98,6 +117,12 @@ export default {
           return parseTime(v[j])
         } else {
           return v[j]
+        }
+      }).map((d , i)=>{
+        if ( i % 2 === 0){
+          return cell(d , { font: { sz: 14, bold: true, color: { rgb: "FFFFAA00" } }, fill: { bgColor: { indexed: 64 }, fgColor: { rgb: "FFFF00" } } })
+        }else{
+          return cell(d)
         }
       }))
     }

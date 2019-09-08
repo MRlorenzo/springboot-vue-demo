@@ -2,6 +2,8 @@
  * Created by PanJiaChen on 16/11/18.
  */
 
+import XLSX from "xlsx-style";
+
 /**
  * Parse the time to string
  * @param {(Object|string|number)} time
@@ -428,7 +430,15 @@ export function filterUndefinedMenus( routes = [] , menus = [] , { parentPath , 
 
   })
 
-  console.log(list)
-
   return list
+}
+
+/**
+ * 生成导出Excel所使用的数据格式
+ */
+export function cell( source  , style = {} ) {
+  return {
+    v: source,
+    s: style
+  }
 }
