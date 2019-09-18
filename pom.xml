@@ -25,6 +25,7 @@
 		<module>shiro</module>
 		<module>redis</module>
 		<module>common</module>
+		<module>ws</module>
 	</modules>
 
 	<properties>
