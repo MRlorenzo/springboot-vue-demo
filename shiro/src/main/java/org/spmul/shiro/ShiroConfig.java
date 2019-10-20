@@ -31,7 +31,7 @@ import javax.servlet.Filter;
 import java.util.*;
 
 @Configuration
-@PropertySource("classpath:/application.properties")
+@PropertySource("classpath:/application.yml")
 public class ShiroConfig  {
 
 
@@ -82,7 +82,8 @@ public class ShiroConfig  {
         filterChainDefinitionMap.put("/index.html/**","anon");
         filterChainDefinitionMap.put("/user/login","anon");
         filterChainDefinitionMap.put("/static/**","anon");
-
+        filterChainDefinitionMap.put("/test/**","anon");
+        filterChainDefinitionMap.put("/v2/**","anon");
         //坑二: 过滤链是顺序执行，从上而下，一般讲/** 放到最下面
 
         //authc : url定义必须通过认证才可以访问

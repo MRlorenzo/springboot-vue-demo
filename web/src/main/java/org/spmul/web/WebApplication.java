@@ -9,10 +9,12 @@ import org.springframework.boot.web.embedded.tomcat.TomcatServletWebServerFactor
 import org.springframework.boot.web.servlet.server.ServletWebServerFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
+import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 @MapperScan("org.spmul.dao")
 @SpringBootApplication
 @ComponentScan(basePackages = {"org.spmul"})
+@EnableSwagger2
 public class WebApplication {
 
 	public static void main(String[] args) {

@@ -26,6 +26,7 @@
 		<module>redis</module>
 		<module>common</module>
 		<module>ws</module>
+		<module>swagger</module>
 	</modules>
 
 	<properties>
