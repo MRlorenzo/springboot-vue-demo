@@ -84,6 +84,7 @@ public class ShiroConfig  {
         filterChainDefinitionMap.put("/static/**","anon");
         filterChainDefinitionMap.put("/test/**","anon");
         filterChainDefinitionMap.put("/v2/**","anon");
+        filterChainDefinitionMap.put("/swagger-ui.html","anon");
         //坑二: 过滤链是顺序执行，从上而下，一般讲/** 放到最下面
 
         //authc : url定义必须通过认证才可以访问
